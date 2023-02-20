@@ -1,6 +1,7 @@
 import SideBar from "./components/topbar/SideBar"
 import TobBar from "./components/topbar/TobBar"
 import styled from "styled-components"
+import Home from "./pages/Home"
 const Container = styled.div`
   display: flex;
 `
@@ -14,7 +15,9 @@ function App() {
       <TobBar />
       <Container>
         <SideBar />
-        <Components>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Distinctio voluptas quos alias corporis voluptatum molestiae, minus reprehenderit rerum! Dolorem animi repudiandae iusto. Odio enim eius dicta. Quidem cupiditate ullam ex.</Components>
+        <Components>
+          <Home />
+        </Components>
       </Container>
     </div>
   )
