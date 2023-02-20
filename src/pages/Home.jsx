@@ -1,12 +1,14 @@
 import styled from "styled-components"
+import FeaturedInfo from "../components/topbar/FeaturedInfo"
 
 const Container = styled.div`
   display: flex;
-  background-color: red;
 `
 const Home = () => {
   return (
-    <Container>Home</Container>
+    <Container>
+      <FeaturedInfo />
+    </Container>
   )
 }
 

@@ -7,6 +7,7 @@ const Container = styled.div`
 `
 const Components = styled.div`
   flex: 4;
+  margin-top: 10px;
 `
 
 function App() {
