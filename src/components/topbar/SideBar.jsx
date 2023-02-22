@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { NavLink } from "react-router-dom"
 import LineStyleIcon from '@mui/icons-material/LineStyle';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -16,17 +17,19 @@ const Container = styled.div`
   min-height: calc(100vh - 50px);
   position: sticky;
   top: 50px;
-  background-color: #e2e2eb;
+  background-color: #f9f9fb;
 `
 const Wrapper = styled.div`
   padding: 20px;
-  color:#cfcfcf;
+  color:#adadad;
+  position: sticky;
+  top: 50px;
 `
 const Menue = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 `
 const Title = styled.h2`
-  font-size: 13px;
+  font-size: 15px;
   color: rgb(145, 145, 145);
 `
 const SideList = styled.ul`
@@ -34,19 +37,32 @@ const SideList = styled.ul`
   padding: 5px;
 `
 const ListItem = styled.li`
-  padding: 5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
   border-radius: 10px;
-  &:hover, &.active {
+  margin-bottom: 4px;
+  padding-right: 10px;
+  &:hover {
     background-color:rgb(128, 128, 136) ;
+    color: white;
   }
 `
 const Icon = styled.div`
   margin-right: 10px;
   font-size: 8px !important;
 `
+const linkDefaultStyles = {
+  borderRadius: "10px",
+  textDecoration: "none",
+  width: "100%",
+  display: "flex",
+  alignItems: "center",
+  color: "inherit",
+  padding: "5px",
+}
+const activeLinkStyles = {
+  backgroundColor: "#808088",
+  ...linkDefaultStyles,
+  color: "white",
+}
 
 const SideBar = () => {
   return (
@@ -55,23 +71,32 @@ const SideBar = () => {
         <Menue>
           <Title>Dashboard</Title>
           <SideList>
-            <ListItem className="active">
-              <Icon>
-                <LineStyleIcon />
-              </Icon>
-              Home
+            <ListItem >
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/"}>
+                <Icon>
+                  <LineStyleIcon />
+                </Icon>
+                Home
+              </NavLink>
             </ListItem>
             <ListItem>
-              <Icon>
-                <TimelineIcon />
-              </Icon>
-              Analytics
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/analytics"}>
+                <Icon>
+                  <TimelineIcon />
+                </Icon>
+                Analytics
+              </NavLink>
             </ListItem>
             <ListItem>
-              <Icon>
-                <TrendingUpIcon />
-              </Icon>
-              Trending
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/trending"}>
+                <Icon>
+                  <TrendingUpIcon />
+                </Icon>
+                Trending
+              </NavLink>
             </ListItem>
           </SideList>
         </Menue>
@@ -79,22 +104,31 @@ const SideBar = () => {
           <Title>Quick Menue</Title>
           <SideList>
             <ListItem>
-              <Icon>
-                <GroupIcon />
-              </Icon>
-              Users
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/users"}>
+                <Icon>
+                  <GroupIcon />
+                </Icon>
+                Users
+              </NavLink>
             </ListItem>
             <ListItem>
-              <Icon>
-                <CategoryIcon />
-              </Icon>
-              Products
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/products"}>
+                <Icon>
+                  <CategoryIcon />
+                </Icon>
+                Products
+              </NavLink>
             </ListItem>
             <ListItem>
-              <Icon>
-                <PaidIcon />
-              </Icon>
-              Transactions
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/transactions"}>
+                <Icon>
+                  <PaidIcon />
+                </Icon>
+                Transactions
+              </NavLink>
             </ListItem>
           </SideList>
         </Menue>
@@ -102,22 +136,31 @@ const SideBar = () => {
           <Title>Notifications</Title>
           <SideList>
             <ListItem >
-              <Icon>
-                <EmailIcon />
-              </Icon>
-              Mail
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/mail"}>
+                <Icon>
+                  <EmailIcon />
+                </Icon>
+                Mail
+              </NavLink>
             </ListItem>
             <ListItem>
-              <Icon>
-                <WarningIcon />
-              </Icon>
-              Feedback
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/feedback"}>
+                <Icon>
+                  <WarningIcon />
+                </Icon>
+                Feedback
+              </NavLink>
             </ListItem>
             <ListItem>
-              <Icon>
-                <ForumIcon />
-              </Icon>
-              Messages
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/messages"}>
+                <Icon>
+                  <ForumIcon />
+                </Icon>
+                Messages
+              </NavLink>
             </ListItem>
           </SideList>
         </Menue>
@@ -125,22 +168,31 @@ const SideBar = () => {
           <Title>Staff</Title>
           <SideList>
             <ListItem>
-              <Icon>
-                <ManageAccountsIcon />
-              </Icon>
-              Manage
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/manage"}>
+                <Icon>
+                  <ManageAccountsIcon />
+                </Icon>
+                Manage
+              </NavLink>
             </ListItem>
             <ListItem>
-              <Icon>
-                <TimelineIcon />
-              </Icon>
-              Analytics
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/analytics"}>
+                <Icon>
+                  <TimelineIcon />
+                </Icon>
+                Analytics
+              </NavLink>
             </ListItem>
             <ListItem>
-              <Icon>
-                <SummarizeIcon />
-              </Icon>
-              Reports
+              <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
+              } to={"/reports"}>
+                <Icon>
+                  <SummarizeIcon />
+                </Icon>
+                Reports
+              </NavLink>
             </ListItem>
           </SideList>
         </Menue>

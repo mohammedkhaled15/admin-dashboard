@@ -2,6 +2,9 @@ import SideBar from "./components/topbar/SideBar"
 import TobBar from "./components/topbar/TobBar"
 import styled from "styled-components"
 import Home from "./pages/Home"
+import Users from "./pages/Users"
+import { Routes, Route } from "react-router-dom"
+
 const Container = styled.div`
   display: flex;
 `
@@ -17,7 +20,10 @@ function App() {
       <Container>
         <SideBar />
         <Components>
-          <Home />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/users" element={<Users />} />
+          </Routes>
         </Components>
       </Container>
     </div>
