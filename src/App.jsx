@@ -5,6 +5,8 @@ import Home from "./pages/Home"
 import Users from "./pages/Users"
 import { Routes, Route } from "react-router-dom"
 import UserPage from "./pages/UserPage"
+import NewUser from "./pages/NewUser"
+import Products from "./pages/Products"
 
 const Container = styled.div`
   display: flex;
@@ -25,6 +27,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/users" element={<Users />} />
             <Route path="/users/:userId" element={<UserPage />} />
+            <Route path="/newUser" element={<NewUser />} />
+            <Route path="/products" element={<Products />} />
           </Routes>
         </Components>
       </Container>
