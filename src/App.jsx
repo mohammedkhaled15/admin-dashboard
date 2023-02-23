@@ -4,6 +4,7 @@ import styled from "styled-components"
 import Home from "./pages/Home"
 import Users from "./pages/Users"
 import { Routes, Route } from "react-router-dom"
+import UserPage from "./pages/UserPage"
 
 const Container = styled.div`
   display: flex;
@@ -23,6 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/users/:userId" element={<UserPage />} />
           </Routes>
         </Components>
       </Container>

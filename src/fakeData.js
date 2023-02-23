@@ -48,3 +48,62 @@ export const userData = [
     "Active Users": 2300,
   },
 ];
+
+export const users = [
+  {
+    id: 1,
+    username: "Snow",
+    avatar: "../../public/assits/user1.jpg",
+    email: "username@blblb.com",
+    status: "active",
+    transactions: "$1200.00",
+  },
+  {
+    id: 2,
+    username: "Snow",
+    avatar: "../../public/assits/user4.jpg",
+    email: "username@blblb.com",
+    status: "active",
+    transactions: "$1200.00",
+  },
+  {
+    id: 3,
+    username: "Snow",
+    avatar: "../../public/assits/user2.jpg",
+    email: "username@blblb.com",
+    status: "active",
+    transactions: "$1200.00",
+  },
+  {
+    id: 4,
+    username: "Snow",
+    avatar: "../../public/assits/user3.jpg",
+    email: "username@blblb.com",
+    status: "active",
+    transactions: "$1200.00",
+  },
+  {
+    id: 5,
+    username: "Snow",
+    avatar: "../../public/assits/user4.jpg",
+    email: "username@blblb.com",
+    status: "active",
+    transactions: "$1200.00",
+  },
+  {
+    id: 6,
+    username: "Snow",
+    avatar: "../../public/assits/user3.jpg",
+    email: "username@blblb.com",
+    status: "active",
+    transactions: "$1200.00",
+  },
+  {
+    id: 7,
+    username: "Snow",
+    avatar: "../../public/assits/user2.jpg",
+    email: "username@blblb.com",
+    status: "active",
+    transactions: "$1200.00",
+  },
+];
