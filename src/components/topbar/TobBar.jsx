@@ -2,6 +2,7 @@ import styled from "styled-components"
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import LanguageIcon from '@mui/icons-material/Language';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -19,13 +20,16 @@ const Wrapper = styled.div`
   justify-content: space-between;
 `
 const TopLeft = styled.div`
-
+  .logo{
+    text-decoration: none;
+  }
 `
 const Logo = styled.span`
-  font-style: 28px;
+  font-size: 28px;
   font-weight: bold;
   cursor: pointer;
   color: darkblue;
+  text-decoration: none !important;
 `
 const TopRight = styled.div`
   display: flex;
@@ -64,7 +68,9 @@ const TobBar = () => {
     <Container>
       <Wrapper>
         <TopLeft>
-          <Logo>Ecommerce Admin</Logo>
+          <Link to="/" className="logo">
+            <Logo>Ecommerce Admin</Logo>
+          </Link>
         </TopLeft>
         <TopRight>
           <IconContainer>

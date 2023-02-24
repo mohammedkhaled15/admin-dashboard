@@ -6,7 +6,9 @@ import Users from "./pages/Users"
 import { Routes, Route } from "react-router-dom"
 import UserPage from "./pages/UserPage"
 import NewUser from "./pages/NewUser"
-import Products from "./pages/Products"
+import ProductList from "./pages/ProductList"
+import ProductPage from "./pages/ProductPage"
+import NewProduct from "./pages/NewProduct"
 
 const Container = styled.div`
   display: flex;
@@ -28,7 +30,9 @@ function App() {
             <Route path="/users" element={<Users />} />
             <Route path="/users/:userId" element={<UserPage />} />
             <Route path="/newUser" element={<NewUser />} />
-            <Route path="/products" element={<Products />} />
+            <Route path="/products" element={<ProductList />} />
+            <Route path="/products/:productId" element={<ProductPage />} />
+            <Route path="/newProduct" element={<NewProduct />} />
           </Routes>
         </Components>
       </Container>
