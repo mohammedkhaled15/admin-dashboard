@@ -3,6 +3,11 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import LanguageIcon from '@mui/icons-material/Language';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Link } from "react-router-dom";
+import { logout } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
+import { resetUser } from "../../redux/userSlice";
+import { persistor } from "./../../redux/store";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -64,6 +69,17 @@ const ProfileImage = styled.img`
 `
 
 const TobBar = () => {
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    persistor.purge()
+    logout(dispatch)
+    dispatch(resetUser())
+    navigate("/login", { replace: true })
+  }
+
   return (
     <Container>
       <Wrapper>
@@ -73,6 +89,7 @@ const TobBar = () => {
           </Link>
         </TopLeft>
         <TopRight>
+          <button onClick={handleLogout}>LogOut</button>
           <IconContainer>
             <NotificationsNoneIcon />
             <Badge>2</Badge>
