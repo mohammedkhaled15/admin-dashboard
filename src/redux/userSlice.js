@@ -12,7 +12,8 @@ export const login = async (dispatch, user) => {
     dispatch(loginSuccess(res.data));
     console.log(res.data);
   } catch (error) {
-    dispatch(loginFailure());
+    dispatch(loginFailure(error?.response?.data));
+    console.log(error.response.data);
   }
 };
 
@@ -49,15 +50,18 @@ const userSlice = createSlice({
     updateAccessToken: (state, action) => {
       state.currentUser.accessToken = action.payload;
     },
-    loginFailure: (state) => {
+    loginFailure: (state, action) => {
       state.isFetching = false;
-      state.error = true;
+      state.error = action.payload;
     },
     logoutFailure: (state, action) => {
       state.isFetching = false;
       state.error = action.payload;
     },
     resetUser: () => initialState,
+    clearError: (state) => {
+      state.error = "";
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, (state) => {
@@ -72,6 +76,7 @@ export const {
   loginSuccess,
   loginFailure,
   logoutFailure,
+  clearError,
   resetUser,
   updateAccessToken,
 } = userSlice.actions;

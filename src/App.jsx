@@ -1,5 +1,5 @@
-import SideBar from "./components/topbar/SideBar"
-import TobBar from "./components/topbar/TobBar"
+import SideBar from "./components/SideBar"
+import TobBar from "./components/TobBar"
 import styled from "styled-components"
 import Home from "./pages/Home"
 import Users from "./pages/Users"
@@ -23,7 +23,6 @@ const Components = styled.div`
 function App() {
 
   const currentUser = useSelector(state => state.user.currentUser)
-  console.log(currentUser)
 
   return (
     <div>

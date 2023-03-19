@@ -73,7 +73,7 @@ const SideBar = () => {
           <SideList>
             <ListItem >
               <NavLink style={({ isActive }) => isActive ? activeLinkStyles : linkDefaultStyles
-              } to={"/"}>
+              } to={"/home"}>
                 <Icon>
                   <LineStyleIcon />
                 </Icon>

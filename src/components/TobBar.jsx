@@ -3,10 +3,10 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import LanguageIcon from '@mui/icons-material/Language';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Link } from "react-router-dom";
-import { logout } from "../../redux/userSlice";
+import { logout } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
-import { resetUser } from "../../redux/userSlice";
-import { persistor } from "./../../redux/store";
+import { resetUser } from "../redux/userSlice";
+import { persistor } from "./../redux/store";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`

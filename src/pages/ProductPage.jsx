@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import Chart from '../components/topbar/Chart'
+import Chart from '../components/Chart'
 import { productData } from "../fakeData"
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 

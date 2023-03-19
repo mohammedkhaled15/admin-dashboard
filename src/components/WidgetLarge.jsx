@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import usePrivateRequest from '../hooks/usePrivateRequestInterceptors'
 
 const Container = styled.div`
   flex: 2;
@@ -54,6 +56,21 @@ const Button = styled.button`
 
 const WidgetLarge = () => {
 
+  const [orders, setOrders] = useState([])
+  const privateRequest = usePrivateRequest()
+
+  useEffect(() => {
+    const getAllOrders = async () => {
+      try {
+        const res = await privateRequest.get("/orders")
+        setOrders(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getAllOrders()
+  }, [])
+
   return (
     <Container>
       <Title>Latest Transactions</Title>
@@ -67,6 +84,19 @@ const WidgetLarge = () => {
           </TableRow>
         </thead>
         <tbody>
+          {
+            orders.map(order => (
+              <TableRow>
+                <TableDataUser>
+                  <UserImage src={"/assits/user2.jpg"} />
+                  <Username>Mohammed Khaled</Username>
+                </TableDataUser>
+                <TableData>2 June 2021</TableData>
+                <TableData>$ 205.00</TableData>
+                <TableData><Button statusType={"Approved"}>Approved</Button></TableData>
+              </TableRow>
+            ))
+          }
           <TableRow>
             <TableDataUser>
               <UserImage src={"/assits/user2.jpg"} />

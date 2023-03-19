@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import userReducer, { logout } from "./userSlice";
+import userReducer from "./userSlice";
 import {
   persistStore,
   persistReducer,

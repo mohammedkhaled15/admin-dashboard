@@ -1,8 +1,8 @@
 import styled from "styled-components"
-import Chart from "../components/topbar/Chart"
-import FeaturedInfo from "../components/topbar/FeaturedInfo"
-import WidgetLarge from "../components/topbar/WidgetLarge"
-import WidgetSmall from "../components/topbar/WidgetSmall"
+import Chart from "../components/Chart"
+import FeaturedInfo from "../components/FeaturedInfo"
+import WidgetLarge from "../components/WidgetLarge"
+import WidgetSmall from "../components/WidgetSmall"
 import { userData } from "../fakeData"
 
 const Container = styled.div`

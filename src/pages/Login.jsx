@@ -1,8 +1,9 @@
 import styled from "styled-components"
-import { useState } from "react"
-import { login } from "../redux/userSlice"
-import { useDispatch } from "react-redux"
+import { useState, useEffect } from "react"
+import { clearError, login } from "../redux/userSlice"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import LoaderSpinner from "../components/LoaderSpinner"
 
 const Container = styled.div`
   width: 80%;
@@ -38,17 +39,31 @@ function Login() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
+  const { isFetching, error, currentUser } = useSelector(state => state.user)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    dispatch(clearError())
+  }, [username, password])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     await login(dispatch, { username, password })
-    navigate("/home", { replace: true })
   }
+
+  useEffect(() => {
+    setPassword("")
+    setUsername("")
+    currentUser ? navigate("/home", { replace: true }) : ""
+  }, [currentUser])
   return (
     <Container>
+      {isFetching && <LoaderSpinner />}
+
       <Form>
+        {error && error}
         <Input name="username" type={"text"} value={username} placeholder="Username" onChange={e => setUsername(e.target.value)} />
         <Input name="password" type={"password"} value={password} placeholder="Password" onChange={e => setPassword(e.target.value)} />
         <Button onClick={handleSubmit}>Login</Button>
