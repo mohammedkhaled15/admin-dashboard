@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import usePrivateRequest from '../hooks/usePrivateRequestInterceptors'
+import { format } from "timeago.js"
 
 const Container = styled.div`
   flex: 2;
@@ -44,8 +45,8 @@ const Username = styled.span`
 
 `
 const Button = styled.button`
-  background-color: ${props => props.statusType === "Approved" ? "#9deba1" : props.statusType === "Pending" ? "#f0e87c" : "#d39997"};
-  color: ${props => props.statusType === "Approved" ? "#106414" : props.statusType === "Pending" ? "#807a26" : "#701815"};
+  background-color: ${props => props.statusType === "succeeded" ? "#9deba1" : props.statusType === "pending" ? "#f0e87c" : "#d39997"};
+  color: ${props => props.statusType === "succeeded" ? "#106414" : props.statusType === "pending" ? "#807a26" : "#701815"};
   cursor: pointer;
   text-align: center;
   border: none;
@@ -86,44 +87,16 @@ const WidgetLarge = () => {
         <tbody>
           {
             orders.map(order => (
-              <TableRow>
+              <TableRow key={order.createdAt}>
                 <TableDataUser>
-                  <UserImage src={"/assits/user2.jpg"} />
-                  <Username>Mohammed Khaled</Username>
+                  <Username>{order.userID}</Username>
                 </TableDataUser>
-                <TableData>2 June 2021</TableData>
-                <TableData>$ 205.00</TableData>
-                <TableData><Button statusType={"Approved"}>Approved</Button></TableData>
+                <TableData>{format(order.createdAt)}</TableData>
+                <TableData>$ {order.amount}</TableData>
+                <TableData><Button statusType={order.status.toLowerCase()}>{order.status.toUpperCase()}</Button></TableData>
               </TableRow>
             ))
           }
-          <TableRow>
-            <TableDataUser>
-              <UserImage src={"/assits/user2.jpg"} />
-              <Username>Mohammed Khaled</Username>
-            </TableDataUser>
-            <TableData>2 June 2021</TableData>
-            <TableData>$ 205.00</TableData>
-            <TableData><Button statusType={"Approved"}>Approved</Button></TableData>
-          </TableRow>
-          <TableRow>
-            <TableDataUser>
-              <UserImage src={"/assits/user2.jpg"} />
-              <Username>Mohammed Khaled</Username>
-            </TableDataUser>
-            <TableData>2 June 2021</TableData>
-            <TableData>$ 205.00</TableData>
-            <TableData><Button statusType={"Declined"}>Declined</Button></TableData>
-          </TableRow>
-          <TableRow>
-            <TableDataUser>
-              <UserImage src={"/assits/user2.jpg"} />
-              <Username>Mohammed Khaled</Username>
-            </TableDataUser>
-            <TableData>2 June 2021</TableData>
-            <TableData>$ 205.00</TableData>
-            <TableData><Button statusType={"Pending"}>Pending</Button></TableData>
-          </TableRow>
         </tbody>
       </Table>
     </Container>

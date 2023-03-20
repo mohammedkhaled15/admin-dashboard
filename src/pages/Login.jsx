@@ -63,7 +63,7 @@ function Login() {
       {isFetching && <LoaderSpinner />}
 
       <Form>
-        {error && error}
+        {error && error?.message}
         <Input name="username" type={"text"} value={username} placeholder="Username" onChange={e => setUsername(e.target.value)} />
         <Input name="password" type={"password"} value={password} placeholder="Password" onChange={e => setPassword(e.target.value)} />
         <Button onClick={handleSubmit}>Login</Button>

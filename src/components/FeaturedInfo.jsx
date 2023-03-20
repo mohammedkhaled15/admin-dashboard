@@ -1,6 +1,8 @@
 import styled from "styled-components"
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import { useEffect, useState } from "react";
+import usePrivateRequest from "../hooks/usePrivateRequestInterceptors";
 
 const Container = styled.div`
   width: 100%;
@@ -45,16 +47,35 @@ const FeaturedSubTitle = styled.h4`
 `
 
 const FeaturedInfo = () => {
+
+  const [ordersIncome, setOrdersIncome] = useState([])
+  const [rate, setRate] = useState(0)
+  const privateRequest = usePrivateRequest()
+
+  useEffect(() => {
+    const getIncome = async () => {
+      try {
+        const res = await privateRequest.get("/orders/income")
+        setOrdersIncome(res.data)
+        setRate((((res.data[1]?.total * 100) / (res.data[0]?.total || 1)) - 100).toFixed(2))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getIncome()
+  }, [])
+  console.log(ordersIncome)
+  console.log(rate)
   return (
     <Container>
       <FeatureItem>
         <Title>Revanue</Title>
         <FeatureContainer>
-          <Money>$2,145</Money>
+          <Money>${ordersIncome[1]?.total / 100}</Money>
           <Rate>
-            -11.4
-            <IconContainer status="negative">
-              <ArrowDownwardIcon />
+            {rate}%
+            <IconContainer status={rate > 0 ? "positive" : "negative"}>
+              {rate > 0 ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
             </IconContainer>
           </Rate>
         </FeatureContainer>

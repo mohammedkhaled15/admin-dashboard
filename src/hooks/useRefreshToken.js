@@ -10,7 +10,7 @@ const useRefreshToken = () => {
         withCredentials: true,
       });
       const { accessToken } = res.data;
-      console.log(`new One ${accessToken}`);
+      // console.log(`new One ${accessToken}`);
       dispatch(updateAccessToken(accessToken));
       return accessToken;
     } catch (error) {
