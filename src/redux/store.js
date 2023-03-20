@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
+import productReducer from "./productSlice";
 import {
   persistStore,
   persistReducer,
@@ -18,7 +19,10 @@ const persistConfig = {
   storage,
 };
 
-const appReducer = combineReducers({ user: userReducer });
+const appReducer = combineReducers({
+  user: userReducer,
+  products: productReducer,
+});
 
 // To create logout action activate when dispatched
 const rootReducer = (state, action) => {

@@ -4,7 +4,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { productsRows } from "../fakeData"
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import usePrivateRequest from "../hooks/usePrivateRequestInterceptors"
+import { deleteProductsFailed, deleteProductsStart, deleteProductsSuccess, getAllProductsFailed, getAllProductsStart, getAllProductsSuccess } from '../redux/productSlice';
+import { useDispatch, useSelector } from "react-redux"
 
 const Container = styled.div`
   flex: 4;
@@ -45,26 +48,53 @@ const DeleteButton = styled.button`
 
 export default function ProductList() {
 
-  const [data, setData] = useState(productsRows)
+  const privateRequest = usePrivateRequest()
+  const dispatch = useDispatch()
+  const products = useSelector(state => state.products.products)
+
+  const getAllProducts = async () => {
+    dispatch(getAllProductsStart());
+    try {
+      const res = await privateRequest.get("/products")
+      dispatch(getAllProductsSuccess(res.data))
+    } catch (error) {
+      console.log(error)
+      dispatch(getAllProductsFailed(error))
+    }
+  };
+
+  useEffect(() => {
+    getAllProducts()
+  }, [])
+
+  const deleteProduct = async (id) => {
+    dispatch(deleteProductsStart())
+    try {
+      await privateRequest.delete(`products/${id}`)
+      dispatch(deleteProductsSuccess(id))
+    } catch (error) {
+      dispatch(deleteProductsFailed(error))
+    }
+  }
 
   const handleDelete = (id) => {
-    setData(data.filter(item => item.id !== id))
+    // setData(data.filter(item => item.id !== id))
+    deleteProduct(id)
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
+    { field: '_id', headerName: 'ID', width: 220 },
     {
-      field: 'product', headerName: 'Product', width: 130, renderCell: (params) => {
+      field: 'product', headerName: 'Product', width: 180, renderCell: (params) => {
         return (
           <UserInfoContainer>
             <Image src={params.row.img} />
-            {params.row.name}
+            {params.row.title}
           </UserInfoContainer>
         )
       }
     },
-    { field: 'stock', headerName: 'Stock', width: 200, },
-    { field: 'status', headerName: 'Status', width: 110, },
+    { field: 'inStock', headerName: 'Stock', width: 200, },
     { field: 'price', headerName: 'Price', width: 120, },
     {
       field: 'actions', headerName: 'Actions', width: 160, renderCell: (params) => {
@@ -74,7 +104,7 @@ export default function ProductList() {
               <EditButton><EditIcon /></EditButton>
             </Link>
             <Link>
-              <DeleteButton onClick={() => handleDelete(params.row.id)}><DeleteIcon /></DeleteButton>
+              <DeleteButton onClick={() => handleDelete(params.row._id)}><DeleteIcon /></DeleteButton>
             </Link>
           </Actions>
         )
@@ -85,7 +115,8 @@ export default function ProductList() {
   return (
     <Container>
       <DataGrid
-        rows={data}
+        rows={products}
+        getRowId={row => row._id}
         columns={columns}
         pageSize={6}
         rowsPerPageOptions={[5, 6]}
