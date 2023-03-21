@@ -19,7 +19,7 @@ const Chart = ({ title, data, dataKey, grid }) => {
       <Title>{title}</Title>
       <ResponsiveContainer width="100%" aspect={4 / 1}>
         <LineChart data={data}>
-          <XAxis dataKey="name" stroke='#5550bd' />
+          <XAxis dataKey="name" stroke='#5550bd' padding={{ left: 20 }} />
           <Line type="monotone" dataKey={dataKey} stroke="#8884d8" />
           <Tooltip />
           {grid && <CartesianGrid stroke="#a0dfdf" strokeDasharray={"5 5 "} />}

@@ -5,6 +5,7 @@ import FeaturedInfo from "../components/FeaturedInfo"
 import WidgetLarge from "../components/WidgetLarge"
 import WidgetSmall from "../components/WidgetSmall"
 import usePrivateRequest from "../hooks/usePrivateRequestInterceptors"
+import months from "../fakeData"
 
 const Container = styled.div`
   width: 100%;
@@ -15,23 +16,10 @@ const Widgets = styled.div`
 `
 const Home = () => {
 
+  const Months = useMemo(() => months, [])
+
   const [usersStats, setUsersStats] = useState([])
   const privateRequest = usePrivateRequest()
-
-  const Months = useMemo(() => [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "July",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ], [])
 
   useEffect(() => {
     const getUsersStats = async () => {

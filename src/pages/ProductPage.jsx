@@ -3,6 +3,11 @@ import styled from 'styled-components'
 import Chart from '../components/Chart'
 import { productData } from "../fakeData"
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { useLocation } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { useEffect, useState, useMemo } from "react"
+import usePrivateRequest from '../hooks/usePrivateRequestInterceptors';
+import months from '../fakeData';
 
 const Container = styled.div`
   flex:4;
@@ -58,12 +63,13 @@ const ProductInfoLower = styled.div`
   margin-top: 10px;
   `
 const ProductInfoItem = styled.div`
-  width: 150px;
+  width: 200px;
   display: flex;
   justify-content: space-between ;
+  gap: 40px;
+  margin-bottom: 5px;
   `
 const ProductInfoKey = styled.div`
-  
   `
 const ProductInfoValue = styled.div`
   font-weight: 300;
@@ -85,11 +91,11 @@ const ProductFormLeft = styled.div`
   flex-direction: column;
 `
 const ProductLabel = styled.label`
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   color: gray;
 `
 const ProductInput = styled.input`
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   border: none;
   padding: 5px;
   border-bottom: 1px solid gray;
@@ -136,6 +142,29 @@ const SubmitButton = styled.button`
 `
 
 const ProductPage = () => {
+
+  const Months = useMemo(() => months, [])
+
+  const [stats, setStats] = useState([])
+  const privateRequest = usePrivateRequest()
+
+  const productId = useLocation().pathname.split("/")[2]
+  const product = useSelector(state => state.products.products.find(product => product._id === productId))
+
+  useEffect(() => {
+    const getstats = async () => {
+      try {
+        const res = await privateRequest(`orders/income?${productId}`)
+        console.log(res.data)
+        res.data.map(item => { setStats(prev => [...prev, { name: Months[item._id], sales: item.total }]) })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getstats()
+  }, [])
+
+  console.log(stats)
   return (
     <Container>
       <ProductTitleCntainer>
@@ -146,25 +175,29 @@ const ProductPage = () => {
       </ProductTitleCntainer>
       <ProductTop>
         <ProductTopLeft>
-          <Chart data={productData} dataKey={"Sales"} title="Sales Performance" />
+          <Chart data={stats} dataKey={"sales"} title="Sales Performance" />
         </ProductTopLeft>
         <ProductTopRight>
           <ProductInfoUpper>
-            <ProductImage src='../../public/assits/user2.jpg' />
-            <ProductName>Apple airpods</ProductName>
+            <ProductImage src={product.img} />
+            <ProductName>{product.title.toUpperCase()}</ProductName>
           </ProductInfoUpper>
           <ProductInfoLower>
             <ProductInfoItem>
-              <ProductInfoKey>sales:</ProductInfoKey>
+              <ProductInfoKey>Id:</ProductInfoKey>
+              <ProductInfoValue>{product._id}</ProductInfoValue>
+            </ProductInfoItem>
+            <ProductInfoItem>
+              <ProductInfoKey>Price:</ProductInfoKey>
+              <ProductInfoValue>{product.price}</ProductInfoValue>
+            </ProductInfoItem>
+            <ProductInfoItem>
+              <ProductInfoKey>Sales:</ProductInfoKey>
               <ProductInfoValue>5123</ProductInfoValue>
             </ProductInfoItem>
             <ProductInfoItem>
-              <ProductInfoKey>active:</ProductInfoKey>
-              <ProductInfoValue>123</ProductInfoValue>
-            </ProductInfoItem>
-            <ProductInfoItem>
-              <ProductInfoKey>in Stock:</ProductInfoKey>
-              <ProductInfoValue>no</ProductInfoValue>
+              <ProductInfoKey>In Stock:</ProductInfoKey>
+              <ProductInfoValue>{product.inStock ? "Yes" : "No"}</ProductInfoValue>
             </ProductInfoItem>
           </ProductInfoLower>
         </ProductTopRight>
@@ -173,21 +206,20 @@ const ProductPage = () => {
         <ProductForm>
           <ProductFormLeft>
             <ProductLabel>Product Name</ProductLabel>
-            <ProductInput type={"text"} placeholder="Apple Airpod" />
-            <ProductLabel>In stock</ProductLabel>
-            <InstockSelect name="inStock" id="inStock">
-              <InstockOption value={"yes"}>Yes</InstockOption>
-              <InstockOption value={"no"}>No</InstockOption>
-            </InstockSelect>
-            <ProductLabel>Active</ProductLabel>
-            <InstockSelect name="active" id="active">
-              <InstockOption value={"yes"}>Yes</InstockOption>
-              <InstockOption value={"no"}>No</InstockOption>
+            <ProductInput type={"text"} placeholder={product.title} />
+            <ProductLabel>Product Desc</ProductLabel>
+            <ProductInput type={"text"} placeholder={product.desc} />
+            <ProductLabel>Product Price</ProductLabel>
+            <ProductInput type={"number"} placeholder={product.price} />
+            <ProductLabel>In Stock</ProductLabel>
+            <InstockSelect name="inStock" id="inStock"  >
+              <InstockOption value={"true"}>Yes</InstockOption>
+              <InstockOption value={"false"}>No</InstockOption>
             </InstockSelect>
           </ProductFormLeft>
           <ProductFormRight>
             <ProductUpdateImage>
-              <ProductUpdatedImg src='../../public/assits/user1.jpg' />
+              <ProductUpdatedImg src={product.img} />
               <UploadLabel htmlFor='file'>
                 <FileUploadIcon />
               </UploadLabel>

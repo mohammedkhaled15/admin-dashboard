@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { productsRows } from "../fakeData"
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import usePrivateRequest from "../hooks/usePrivateRequestInterceptors"
@@ -78,7 +77,6 @@ export default function ProductList() {
   }
 
   const handleDelete = (id) => {
-    // setData(data.filter(item => item.id !== id))
     deleteProduct(id)
   }
 
@@ -100,7 +98,7 @@ export default function ProductList() {
       field: 'actions', headerName: 'Actions', width: 160, renderCell: (params) => {
         return (
           <Actions>
-            <Link to={`/products/${params.row.id}`}>
+            <Link to={`/products/${params.row._id}`}>
               <EditButton><EditIcon /></EditButton>
             </Link>
             <Link>
