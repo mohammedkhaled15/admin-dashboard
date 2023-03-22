@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Chart from '../components/Chart'
-import { productData } from "../fakeData"
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useLocation } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { useEffect, useState, useMemo } from "react"
 import usePrivateRequest from '../hooks/usePrivateRequestInterceptors';
 import months from '../fakeData';
+import { useDispatch } from "react-redux"
+import { editProductsStart, editProductsSuccess } from '../redux/productSlice';
 
 const Container = styled.div`
   flex:4;
@@ -146,17 +147,26 @@ const ProductPage = () => {
   const Months = useMemo(() => months, [])
 
   const [stats, setStats] = useState([])
+
+  const dispatch = useDispatch()
   const privateRequest = usePrivateRequest()
 
   const productId = useLocation().pathname.split("/")[2]
+
   const product = useSelector(state => state.products.products.find(product => product._id === productId))
+
+  const [dataToUpdate, setDataToUpdate] = useState({})
+
+  const handleChange = (e) => {
+    setDataToUpdate(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
 
   useEffect(() => {
     const getstats = async () => {
       try {
-        const res = await privateRequest(`orders/income?${productId}`)
-        console.log(res.data)
-        res.data.map(item => { setStats(prev => [...prev, { name: Months[item._id], sales: item.total }]) })
+        const res = await privateRequest.get(`orders/income?${productId}`)
+        const dataList = res.data.sort((a, b) => a._id - b._id) // sorting months according to its id
+        dataList.map(item => { setStats(prev => [...prev, { name: Months[item._id], sales: item.total }]) })
       } catch (error) {
         console.log(error)
       }
@@ -164,7 +174,19 @@ const ProductPage = () => {
     getstats()
   }, [])
 
-  console.log(stats)
+  const handleUpdate = async (e) => {
+    e.preventDefault()
+    console.log(productId)
+    dispatch(editProductsStart())
+    try {
+      const res = await privateRequest.put(`products/${productId}`, { ...dataToUpdate })
+      dispatch(editProductsSuccess({ id: productId, data: { ...dataToUpdate } }))
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <Container>
       <ProductTitleCntainer>
@@ -179,17 +201,17 @@ const ProductPage = () => {
         </ProductTopLeft>
         <ProductTopRight>
           <ProductInfoUpper>
-            <ProductImage src={product.img} />
-            <ProductName>{product.title.toUpperCase()}</ProductName>
+            <ProductImage src={product?.img} />
+            <ProductName>{product?.title.toUpperCase()}</ProductName>
           </ProductInfoUpper>
           <ProductInfoLower>
             <ProductInfoItem>
               <ProductInfoKey>Id:</ProductInfoKey>
-              <ProductInfoValue>{product._id}</ProductInfoValue>
+              <ProductInfoValue>{product?._id}</ProductInfoValue>
             </ProductInfoItem>
             <ProductInfoItem>
               <ProductInfoKey>Price:</ProductInfoKey>
-              <ProductInfoValue>{product.price}</ProductInfoValue>
+              <ProductInfoValue>{product?.price}</ProductInfoValue>
             </ProductInfoItem>
             <ProductInfoItem>
               <ProductInfoKey>Sales:</ProductInfoKey>
@@ -197,7 +219,7 @@ const ProductPage = () => {
             </ProductInfoItem>
             <ProductInfoItem>
               <ProductInfoKey>In Stock:</ProductInfoKey>
-              <ProductInfoValue>{product.inStock ? "Yes" : "No"}</ProductInfoValue>
+              <ProductInfoValue>{product?.inStock ? "Yes" : "No"}</ProductInfoValue>
             </ProductInfoItem>
           </ProductInfoLower>
         </ProductTopRight>
@@ -206,26 +228,26 @@ const ProductPage = () => {
         <ProductForm>
           <ProductFormLeft>
             <ProductLabel>Product Name</ProductLabel>
-            <ProductInput type={"text"} placeholder={product.title} />
+            <ProductInput onChange={(e) => handleChange(e)} name='title' type={"text"} placeholder={product?.title} />
             <ProductLabel>Product Desc</ProductLabel>
-            <ProductInput type={"text"} placeholder={product.desc} />
+            <ProductInput onChange={(e) => handleChange(e)} name='desc' type={"text"} placeholder={product?.desc} />
             <ProductLabel>Product Price</ProductLabel>
-            <ProductInput type={"number"} placeholder={product.price} />
+            <ProductInput onChange={(e) => handleChange(e)} name='price' type={"number"} placeholder={product?.price} />
             <ProductLabel>In Stock</ProductLabel>
-            <InstockSelect name="inStock" id="inStock"  >
+            <InstockSelect onChange={(e) => handleChange(e)} name="inStock" id="inStock"  >
               <InstockOption value={"true"}>Yes</InstockOption>
               <InstockOption value={"false"}>No</InstockOption>
             </InstockSelect>
           </ProductFormLeft>
           <ProductFormRight>
             <ProductUpdateImage>
-              <ProductUpdatedImg src={product.img} />
+              <ProductUpdatedImg src={product?.img} />
               <UploadLabel htmlFor='file'>
                 <FileUploadIcon />
               </UploadLabel>
               <UploadInput type={"file"} id="file" />
             </ProductUpdateImage>
-            <SubmitButton>Update</SubmitButton>
+            <SubmitButton onClick={(e) => handleUpdate(e)}>Update</SubmitButton>
           </ProductFormRight>
         </ProductForm>
       </ProductBottom>
