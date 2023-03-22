@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux"
 
 const Container = styled.div`
   flex: 4;
-  height: 60vh;
+  height: 80vh;
 `
 const UserInfoContainer = styled.div`
   display: flex;
@@ -116,8 +116,8 @@ export default function ProductList() {
         rows={products}
         getRowId={row => row._id}
         columns={columns}
-        pageSize={6}
-        rowsPerPageOptions={[5, 6]}
+        pageSize={10}
+        rowsPerPageOptions={[9, 10]}
         checkboxSelection
         disableSelectionOnClick
       />

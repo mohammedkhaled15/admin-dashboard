@@ -8,7 +8,7 @@ import { useEffect, useState, useMemo } from "react"
 import usePrivateRequest from '../hooks/usePrivateRequestInterceptors';
 import months from '../fakeData';
 import { useDispatch } from "react-redux"
-import { editProductsStart, editProductsSuccess, failedProcess, startProcess } from '../redux/productSlice';
+import { editProductsSuccess, failedProcess, startProcess } from '../redux/productSlice';
 
 const Container = styled.div`
   flex:4;
