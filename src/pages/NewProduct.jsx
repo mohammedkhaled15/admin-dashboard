@@ -23,11 +23,11 @@ const ProductFormLeft = styled.div`
   flex-direction: column;
 `
 const ProductLabel = styled.label`
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   color: gray;
 `
 const ProductInput = styled.input`
-  margin-bottom: 10px;
+  margin-bottom: 25px;
   border: none;
   padding: 5px;
   border-bottom: 1px solid gray;
@@ -83,6 +83,10 @@ const NewProduct = () => {
         <ProductFormLeft>
           <ProductLabel>Product Name</ProductLabel>
           <ProductInput type={"text"} placeholder="Apple Airpod" />
+          <ProductLabel>Product Description</ProductLabel>
+          <ProductInput type={"text"} placeholder="long long description" />
+          <ProductLabel>Product Price</ProductLabel>
+          <ProductInput type={"number"} placeholder="$100" />
           <ProductLabel>In stock</ProductLabel>
           <InstockSelect name="inStock" id="inStock">
             <InstockOption value={"yes"}>Yes</InstockOption>

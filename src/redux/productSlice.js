@@ -10,24 +10,21 @@ const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    //Get
-    getAllProductsStart: (state) => {
+    startProcess: (state) => {
       state.isFetching = true;
       state.error = false;
     },
+    failedProcess: (state, action) => {
+      state.isFetching = false;
+      state.error = action.payload;
+      console.log(action.payload);
+    },
+    //Get
     getAllProductsSuccess: (state, action) => {
       state.isFetching = false;
       state.products = action.payload;
     },
-    getAllProductsFailed: (state, action) => {
-      state.isFetching = false;
-      state.error = action.payload;
-    },
     //Delete
-    deleteProductsStart: (state) => {
-      state.isFetching = true;
-      state.error = false;
-    },
     deleteProductsSuccess: (state, action) => {
       state.isFetching = false;
       state.products.splice(
@@ -35,15 +32,7 @@ const productSlice = createSlice({
         1
       );
     },
-    deleteProductsFailed: (state, action) => {
-      state.isFetching = false;
-      state.error = action.payload;
-    },
     //Edit
-    editProductsStart: (state) => {
-      state.isFetching = true;
-      state.error = false;
-    },
     editProductsSuccess: (state, action) => {
       state.isFetching = false;
       const productBeforeEdit = {
@@ -57,22 +46,15 @@ const productSlice = createSlice({
         state.products.findIndex((product) => product._id == action.payload.id)
       ] = { ...productBeforeEdit, ...action.payload.data };
     },
-    editProductsFailed: (state, action) => {
-      state.isFetching = false;
-      state.error = action.payload;
-    },
+    //Create
   },
 });
 
 export const {
-  getAllProductsStart,
+  startProcess,
+  failedProcess,
   getAllProductsSuccess,
-  getAllProductsFailed,
-  deleteProductsStart,
   deleteProductsSuccess,
-  deleteProductsFailed,
-  editProductsStart,
   editProductsSuccess,
-  editProductsFailed,
 } = productSlice.actions;
 export default productSlice.reducer;

@@ -3,9 +3,9 @@ import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import usePrivateRequest from "../hooks/usePrivateRequestInterceptors"
-import { deleteProductsFailed, deleteProductsStart, deleteProductsSuccess, getAllProductsFailed, getAllProductsStart, getAllProductsSuccess } from '../redux/productSlice';
+import { deleteProductsSuccess, failedProcess, getAllProductsSuccess, startProcess } from '../redux/productSlice';
 import { useDispatch, useSelector } from "react-redux"
 
 const Container = styled.div`
@@ -52,13 +52,13 @@ export default function ProductList() {
   const products = useSelector(state => state.products.products)
 
   const getAllProducts = async () => {
-    dispatch(getAllProductsStart());
+    dispatch(startProcess());
     try {
       const res = await privateRequest.get("/products")
       dispatch(getAllProductsSuccess(res.data))
     } catch (error) {
       console.log(error)
-      dispatch(getAllProductsFailed(error))
+      dispatch(failedProcess(error))
     }
   };
 
@@ -67,12 +67,12 @@ export default function ProductList() {
   }, [])
 
   const deleteProduct = async (id) => {
-    dispatch(deleteProductsStart())
+    dispatch(startProcess())
     try {
       await privateRequest.delete(`products/${id}`)
       dispatch(deleteProductsSuccess(id))
     } catch (error) {
-      dispatch(deleteProductsFailed(error))
+      dispatch(failedProcess(error))
     }
   }
 

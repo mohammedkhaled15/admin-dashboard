@@ -8,7 +8,7 @@ import { useEffect, useState, useMemo } from "react"
 import usePrivateRequest from '../hooks/usePrivateRequestInterceptors';
 import months from '../fakeData';
 import { useDispatch } from "react-redux"
-import { editProductsStart, editProductsSuccess } from '../redux/productSlice';
+import { editProductsStart, editProductsSuccess, failedProcess, startProcess } from '../redux/productSlice';
 
 const Container = styled.div`
   flex:4;
@@ -177,13 +177,13 @@ const ProductPage = () => {
   const handleUpdate = async (e) => {
     e.preventDefault()
     console.log(productId)
-    dispatch(editProductsStart())
+    dispatch(startProcess())
     try {
       const res = await privateRequest.put(`products/${productId}`, { ...dataToUpdate })
       dispatch(editProductsSuccess({ id: productId, data: { ...dataToUpdate } }))
       console.log(res.data)
     } catch (error) {
-      console.log(error)
+      dispatch(failedProcess)
     }
   }
 
