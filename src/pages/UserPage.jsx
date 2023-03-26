@@ -6,6 +6,7 @@ import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
 import HomeIcon from '@mui/icons-material/Home';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { useSelector } from "react-redux"
 
 const Container = styled.div`
   flex: 4;
@@ -113,7 +114,6 @@ const UserUpdateItem = styled.div`
   margin-top: 10px;
 `
 const Label = styled.label`
-  margin-bottom: 5px;
   font-size: 14px;
 `
 const InfoInput = styled.input`
@@ -161,6 +161,8 @@ const UserUpdateButton = styled.button`
 const UserPage = () => {
   const userId = useLocation().pathname.split("/")[2]
 
+  const userData = useSelector(state => state.usersData.usersData.find(user => user._id === userId))
+  console.log(userData)
   return (
     <Container >
       <Titlecontainer>
@@ -172,35 +174,34 @@ const UserPage = () => {
       <UserContainer>
         <UserShow>
           <UserShowTop>
-            <UserImg src='../../public/assits/user2.jpg' />
+            <UserImg src={userData.img} />
             <UserInfoContainer>
-              <Name>Cameron elsy</Name>
-              <UserTitle>Software Engineer</UserTitle>
+              <Name>{userData.firstname.toUpperCase() + " " + userData.lastname.toUpperCase()}</Name>
             </UserInfoContainer>
           </UserShowTop>
           <UserShowBottom>
             <Subtitle>Account Details</Subtitle>
             <UserInfoBottom>
               <IconContainer><PermIdentityIcon className='icon' /></IconContainer>
-              <UserInfo>Johnsnow22</UserInfo>
+              <UserInfo>{userData.username}</UserInfo>
             </UserInfoBottom>
-            <UserInfoBottom>
+            {/* <UserInfoBottom>
               <IconContainer><CalendarTodayIcon className='icon' /></IconContainer>
               <UserInfo>10.08.2007</UserInfo>
-            </UserInfoBottom>
+            </UserInfoBottom> */}
             <Subtitle>Contact Details</Subtitle>
-            <UserInfoBottom>
+            {/* <UserInfoBottom>
               <IconContainer><CallIcon className='icon' /></IconContainer>
               <UserInfo>+1 123 456 78</UserInfo>
-            </UserInfoBottom>
+            </UserInfoBottom> */}
             <UserInfoBottom>
               <IconContainer><EmailIcon className='icon' /></IconContainer>
-              <UserInfo>Johnsnow22@hghgh.com</UserInfo>
+              <UserInfo>{userData.email}</UserInfo>
             </UserInfoBottom>
-            <UserInfoBottom>
+            {/* <UserInfoBottom>
               <IconContainer><HomeIcon className='icon' /></IconContainer>
               <UserInfo>NY Usa</UserInfo>
-            </UserInfoBottom>
+            </UserInfoBottom> */}
           </UserShowBottom>
         </UserShow>
         <UserUpdate>
@@ -209,15 +210,19 @@ const UserPage = () => {
             <UserUpdateLeft>
               <UserUpdateItem>
                 <Label>Username</Label>
-                <InfoInput type={"text"} placeholder={"Mohadkhaled22"} />
+                <InfoInput type={"text"} placeholder={userData.username} />
               </UserUpdateItem>
               <UserUpdateItem>
-                <Label>Fullname</Label>
-                <InfoInput type={"text"} placeholder={"Mohammed khaled"} />
+                <Label>First name</Label>
+                <InfoInput type={"text"} placeholder={userData.firstname} />
+              </UserUpdateItem>
+              <UserUpdateItem>
+                <Label>Last Name</Label>
+                <InfoInput type={"text"} placeholder={userData.lastname} />
               </UserUpdateItem>
               <UserUpdateItem>
                 <Label>Email</Label>
-                <InfoInput type={"text"} placeholder={"22 jjjgd "} />
+                <InfoInput type={"text"} placeholder={userData.email} />
               </UserUpdateItem>
               <UserUpdateItem>
                 <Label>Mobile</Label>
@@ -230,7 +235,7 @@ const UserPage = () => {
             </UserUpdateLeft>
             <UserUpdateRight>
               <UserUpdateUpload>
-                <UserAvatar src='../../public/assits/user3.jpg' />
+                <UserAvatar src={userData.img} />
                 <PublishLabel htmlFor='file'>
                   <FileUploadIcon className='uploadIcon' />
                 </PublishLabel>

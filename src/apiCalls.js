@@ -14,3 +14,11 @@ export const getAllUsers = async (dispatch, privateRequest) => {
     dispatch(failedProcess(error));
   }
 };
+// export const getCertainUser = async (id, privateRequest) => {
+//   try {
+//     const res = await privateRequest.get(`/users/find/${id}`);
+//     return res.data
+//   } catch (error) {
+//     console.log(error)
+//   }
+// };
