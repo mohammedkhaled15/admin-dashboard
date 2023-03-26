@@ -160,6 +160,7 @@ const UserUpdateButton = styled.button`
 
 const UserPage = () => {
   const userId = useLocation().pathname.split("/")[2]
+
   return (
     <Container >
       <Titlecontainer>

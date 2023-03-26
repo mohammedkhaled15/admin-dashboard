@@ -70,6 +70,7 @@ const SubmitButton = styled.button`
 `
 
 const NewUser = () => {
+
   return (
     <Container>
       <Title>New User</Title>

@@ -64,8 +64,7 @@ const FeaturedInfo = () => {
     }
     getIncome()
   }, [])
-  console.log(ordersIncome)
-  console.log(rate)
+
   return (
     <Container>
       <FeatureItem>

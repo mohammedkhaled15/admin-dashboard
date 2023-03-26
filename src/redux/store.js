@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import productReducer from "./productSlice";
+import usersDataReducer from "./usersDataSlice";
 import {
   persistStore,
   persistReducer,
@@ -22,6 +23,7 @@ const persistConfig = {
 const appReducer = combineReducers({
   user: userReducer,
   products: productReducer,
+  usersData: usersDataReducer,
 });
 
 // To create logout action activate when dispatched

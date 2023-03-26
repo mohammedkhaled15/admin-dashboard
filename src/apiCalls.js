@@ -14,13 +14,3 @@ export const getAllUsers = async (dispatch, privateRequest) => {
     dispatch(failedProcess(error));
   }
 };
-
-export const getTotallTrasactionsForUser = async (id, privateRequest) => {
-  try {
-    const res = await privateRequest.get(`orders/find/${id}`);
-    const totalAmount = res.data.reduce((acc, curr) => (acc += curr.amount), 0);
-    return t
-  } catch (error) {
-    console.log(error)
-  }
-};

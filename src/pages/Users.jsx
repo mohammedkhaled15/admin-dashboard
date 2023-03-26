@@ -2,10 +2,9 @@ import styled from 'styled-components'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { users } from "../fakeData"
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { getAllUsers, getTotallTrasactionsForUser } from "../apiCalls"
+import { useEffect } from 'react';
+import { getAllUsers } from "../apiCalls"
 import { useDispatch, useSelector } from "react-redux"
 import usePrivateRequest from "../hooks/usePrivateRequestInterceptors"
 
@@ -51,18 +50,14 @@ const DeleteButton = styled.button`
 
 const Users = () => {
 
-  // const [data, setData] = useState(users)
-
   const dispatch = useDispatch()
   const privateRequest = usePrivateRequest()
   const users = useSelector(state => state.usersData.usersData)
-  const [usersTransactions, setUsersTransactions] = useState({})
 
   useEffect(() => {
     getAllUsers(dispatch, privateRequest)
   }, [])
-  // console.log(getTotallTrasactionsForUser("63e2963bc196486900884854", privateRequest))
-  // console.log(usersTransactions)
+
 
   const handleDelete = (id) => {
     setData(data.filter(item => item.id !== id))
@@ -97,7 +92,7 @@ const Users = () => {
       field: 'actions', headerName: 'Actions', width: 160, renderCell: (params) => {
         return (
           <Actions>
-            <Link to={`/users/${params.row.id}`}>
+            <Link to={`/users/${params.row._id}`}>
               <EditButton><EditIcon /></EditButton>
             </Link>
             <Link>
