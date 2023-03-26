@@ -4,7 +4,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Link } from "react-router-dom";
 import { logout } from "../redux/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { resetUser } from "../redux/userSlice";
 import { persistor } from "./../redux/store";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,9 @@ const Wrapper = styled.div`
   display: flex;
   align-items:center;
   justify-content: space-between;
+  -webkit-box-shadow: 0px 13px 10px -1px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 13px 10px -1px rgba(0,0,0,0.75);
+  box-shadow: 0px 6px 7px 0px rgba(0,0,0,0.75); ;
 `
 const TopLeft = styled.div`
   .logo{
@@ -35,6 +38,17 @@ const Logo = styled.span`
   cursor: pointer;
   color: darkblue;
   text-decoration: none !important;
+`
+const LogOutButton = styled.button`
+  width: 80px;
+  border: none;
+  padding: 5px;
+  background-color: #b62d29;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 15px;
 `
 const TopRight = styled.div`
   display: flex;
@@ -71,6 +85,7 @@ const ProfileImage = styled.img`
 const TobBar = () => {
 
   const dispatch = useDispatch()
+  const loggedUser = useSelector(state => state.user.currentUser)
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -89,7 +104,7 @@ const TobBar = () => {
           </Link>
         </TopLeft>
         <TopRight>
-          <button onClick={handleLogout}>LogOut</button>
+          {loggedUser && <LogOutButton onClick={handleLogout}>LogOut</LogOutButton>}
           <IconContainer>
             <NotificationsNoneIcon />
             <Badge>2</Badge>

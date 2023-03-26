@@ -4,7 +4,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { users } from "../fakeData"
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getAllUsers, getTotallTrasactionsForUser } from "../apiCalls"
+import { useDispatch, useSelector } from "react-redux"
+import usePrivateRequest from "../hooks/usePrivateRequestInterceptors"
 
 const Container = styled.div`
     flex: 4;
@@ -46,31 +49,50 @@ const DeleteButton = styled.button`
   margin-right: 20px;
 `
 
-
-
 const Users = () => {
 
-  const [data, setData] = useState(users)
+  // const [data, setData] = useState(users)
+
+  const dispatch = useDispatch()
+  const privateRequest = usePrivateRequest()
+  const users = useSelector(state => state.usersData.usersData)
+  const [usersTransactions, setUsersTransactions] = useState({})
+
+  useEffect(() => {
+    getAllUsers(dispatch, privateRequest)
+  }, [])
+  // console.log(getTotallTrasactionsForUser("63e2963bc196486900884854", privateRequest))
+  // console.log(usersTransactions)
 
   const handleDelete = (id) => {
     setData(data.filter(item => item.id !== id))
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
+    { field: '_id', headerName: 'ID', width: 200 },
     {
-      field: 'user', headerName: 'Username', width: 130, renderCell: (params) => {
+      field: 'username', headerName: 'Username', width: 180, renderCell: (params) => {
         return (
           <UserInfoContainer>
-            <Image src={params.row.avatar} />
+            <Image src={params.row.img || "../../public/assits/defaultUser.png"} />
             {params.row.username}
           </UserInfoContainer>
         )
       }
     },
     { field: 'email', headerName: 'Email', width: 200, },
-    { field: 'status', headerName: 'Status', width: 110, },
-    { field: 'transactions', headerName: 'Transactions', width: 120, },
+    {
+      field: 'isAdmin', headerName: 'Admin', width: 110, renderCell: (params) => {
+        return (
+          <span>
+            {params.row.isAdmin ? "YES" : "NO"}
+          </span>
+        )
+      }
+    },
+    {
+      field: 'transactions', headerName: 'Transactions', width: 120,
+    },
     {
       field: 'actions', headerName: 'Actions', width: 160, renderCell: (params) => {
         return (
@@ -90,10 +112,11 @@ const Users = () => {
   return (
     <Container>
       <DataGrid
-        rows={data}
+        rows={users}
         columns={columns}
-        pageSize={8}
-        rowsPerPageOptions={[5]}
+        pageSize={10}
+        getRowId={row => row._id}
+        rowsPerPageOptions={[5, 10]}
         checkboxSelection
         disableSelectionOnClick
       />

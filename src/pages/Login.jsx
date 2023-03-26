@@ -7,7 +7,10 @@ import LoaderSpinner from "../components/LoaderSpinner"
 
 const Container = styled.div`
   width: 80%;
-  margin: 40px auto ;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 const Form = styled.form`
   width: 60%;
@@ -25,13 +28,19 @@ const Input = styled.input`
   }
   padding: 10px 5px;
   width: 100%;
+  border:1px solid teal;
+  border-radius: 12px;
 `
-const Button = styled.button`
+const LogOutButton = styled.button`
+  width: 80px;
   border: none;
-  background-color: gray;
+  padding: 5px;
+  background-color: teal;
+  color: white;
   font-size: 16px;
-  padding: 20px;
+  border-radius: 5px;
   cursor: pointer;
+  margin-right: 15px;
 `
 
 function Login() {
@@ -66,7 +75,7 @@ function Login() {
         {error && error?.message}
         <Input name="username" type={"text"} value={username} placeholder="Username" onChange={e => setUsername(e.target.value)} />
         <Input name="password" type={"password"} value={password} placeholder="Password" onChange={e => setPassword(e.target.value)} />
-        <Button onClick={handleSubmit}>Login</Button>
+        <LogOutButton onClick={handleSubmit}>Login</LogOutButton>
       </Form>
     </Container>
   )
