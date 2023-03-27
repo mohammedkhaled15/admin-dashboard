@@ -82,6 +82,9 @@ const Subtitle = styled.h6`
   margin-bottom: 20px;
 `
 const IconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 .icon {
   font-size: 16px !important;
 }
@@ -103,7 +106,9 @@ const UserUpdateTitle = styled.h4`
 const UserUpdateForm = styled.form`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   margin-top: 20px;
+  gap: 30px;
 `
 const UserUpdateLeft = styled.div`
 
@@ -130,6 +135,9 @@ const UserUpdateRight = styled.div`
 const UserUpdateUpload = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 40px;
   .uploadIcon{
     cursor: pointer;
   }
@@ -139,24 +147,35 @@ const UserAvatar = styled.img`
   height: 100px;
   border-radius: 10px;
   object-fit: cover;
-  margin-right: 20px;
 `
 const PublishLabel = styled.label`
   cursor: pointer;
+  color: #008057;
+  background-color: #81c9c9;
+  border-radius: 5px;
+  width: 60px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 const UploadInput = styled.input`
   display: none;
 `
 const UserUpdateButton = styled.button`
+  width: 80%;
+  height: 40px;
   border: none;
   border-radius: 5px;
   padding: 5px;
   cursor: pointer;
   color: white;
+  margin: 0 auto;
+  font-size: 18px;
+  letter-spacing: 2px;
   background-color: darkblue;
   font-weight: 600;
 `
-
 
 const UserPage = () => {
   const userId = useLocation().pathname.split("/")[2]
@@ -185,23 +204,19 @@ const UserPage = () => {
               <IconContainer><PermIdentityIcon className='icon' /></IconContainer>
               <UserInfo>{userData.username}</UserInfo>
             </UserInfoBottom>
-            {/* <UserInfoBottom>
-              <IconContainer><CalendarTodayIcon className='icon' /></IconContainer>
-              <UserInfo>10.08.2007</UserInfo>
-            </UserInfoBottom> */}
             <Subtitle>Contact Details</Subtitle>
-            {/* <UserInfoBottom>
+            <UserInfoBottom>
               <IconContainer><CallIcon className='icon' /></IconContainer>
-              <UserInfo>+1 123 456 78</UserInfo>
-            </UserInfoBottom> */}
+              <UserInfo>{userData.mobile}</UserInfo>
+            </UserInfoBottom>
             <UserInfoBottom>
               <IconContainer><EmailIcon className='icon' /></IconContainer>
               <UserInfo>{userData.email}</UserInfo>
             </UserInfoBottom>
-            {/* <UserInfoBottom>
+            <UserInfoBottom>
               <IconContainer><HomeIcon className='icon' /></IconContainer>
-              <UserInfo>NY Usa</UserInfo>
-            </UserInfoBottom> */}
+              <UserInfo>{userData.address}</UserInfo>
+            </UserInfoBottom>
           </UserShowBottom>
         </UserShow>
         <UserUpdate>
@@ -226,11 +241,11 @@ const UserPage = () => {
               </UserUpdateItem>
               <UserUpdateItem>
                 <Label>Mobile</Label>
-                <InfoInput type={"number"} placeholder={"544455848"} />
+                <InfoInput type={"number"} placeholder={userData.mobile} />
               </UserUpdateItem>
               <UserUpdateItem>
                 <Label>Address</Label>
-                <InfoInput type={"text"} placeholder={"dlkfsldfj lsdjlskdf"} />
+                <InfoInput type={"text"} placeholder={userData.address} />
               </UserUpdateItem>
             </UserUpdateLeft>
             <UserUpdateRight>
@@ -241,8 +256,8 @@ const UserPage = () => {
                 </PublishLabel>
                 <UploadInput id='file' type={"file"} />
               </UserUpdateUpload>
-              <UserUpdateButton>Update</UserUpdateButton>
             </UserUpdateRight>
+            <UserUpdateButton>Update</UserUpdateButton>
           </UserUpdateForm>
         </UserUpdate>
       </UserContainer>
