@@ -1,4 +1,6 @@
 import styled from 'styled-components'
+import FormInput from '../components/FormInput'
+import { useState } from 'react'
 
 const Container = styled.div`
   flex: 4;
@@ -15,7 +17,7 @@ const NewUserForm = styled.form`
   flex-wrap: wrap;
   gap: 20px;
 `
-const NewUSerFormItem = styled.div`
+const NewUserFormItem = styled.div`
   width: 350px;
   display: flex;
   flex-direction: column;
@@ -70,32 +72,83 @@ const SubmitButton = styled.button`
 `
 
 const NewUser = () => {
+  const [values, setValues] = useState({
+    username: "",
+    password: "",
+    email: "",
+    mobile: "",
+    address: ""
+  })
+  const Inputs = [
+    {
+      id: 1,
+      name: "username",
+      type: "text",
+      placeholder: "Username",
+      label: "Username"
+    },
+    {
+      id: 2,
+      name: "password",
+      type: "password",
+      placeholder: "Password",
+      label: "Password"
+    },
+    {
+      id: 3,
+      name: "email",
+      type: "email",
+      placeholder: "Email",
+      label: "Email"
+    },
+    {
+      id: 4,
+      name: "mobile",
+      type: "tel",
+      placeholder: "Mobile",
+      label: "Mobile"
+    },
+    {
+      id: 5,
+      name: "address",
+      type: "text",
+      placeholder: "Address",
+      label: "Address"
+    },
+  ]
+
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value })
+  }
 
   return (
     <Container>
       <Title>New User</Title>
       <NewUserForm>
-        <NewUSerFormItem>
+        {Inputs.map(input => (
+          <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChange} />
+        ))}
+        {/* <NewUserFormItem>
           <Label>Username</Label>
           <Input type={"text"} placeholder="Username" />
-        </NewUSerFormItem>
-        <NewUSerFormItem>
+        </NewUserFormItem>
+        <NewUserFormItem>
           <Label>Email</Label>
           <Input type={"text"} placeholder="Email" />
-        </NewUSerFormItem>
-        <NewUSerFormItem>
+        </NewUserFormItem>
+        <NewUserFormItem>
           <Label>Password</Label>
           <Input type={"password"} placeholder="Password" />
-        </NewUSerFormItem>
-        <NewUSerFormItem>
+        </NewUserFormItem>
+        <NewUserFormItem>
           <Label>Phone</Label>
           <Input type={"number"} placeholder="Phone" />
-        </NewUSerFormItem>
-        <NewUSerFormItem>
+        </NewUserFormItem>
+        <NewUserFormItem>
           <Label>Address</Label>
           <Input type={"text"} placeholder="Address" />
-        </NewUSerFormItem>
-        <NewUSerFormItem>
+        </NewUserFormItem> */}
+        <NewUserFormItem>
           <Label>Gender</Label>
           <GenderCollection>
             <GenderInput type={"radio"} name="gender" id='male' value={"male"} />
@@ -103,14 +156,14 @@ const NewUser = () => {
             <GenderInput type={"radio"} name="gender" id='female' value={"female"} />
             <GenderLabel htmlFor='female'>Female</GenderLabel>
           </GenderCollection>
-        </NewUSerFormItem>
-        <NewUSerFormItem>
+        </NewUserFormItem>
+        <NewUserFormItem>
           <Label>Active</Label>
           <SelectInput name='active' id="active">
             <Option value={"yes"}>Yes</Option>
             <Option value={"no"}>No</Option>
           </SelectInput>
-        </NewUSerFormItem>
+        </NewUserFormItem>
         <SubmitButton>Create</SubmitButton>
       </NewUserForm>
     </Container>

@@ -2,6 +2,7 @@ import {
   startProcess,
   failedProcess,
   getAllUsersData,
+  updateUserData,
 } from "./redux/usersDataSlice";
 
 export const getAllUsers = async (dispatch, privateRequest) => {
@@ -14,11 +15,18 @@ export const getAllUsers = async (dispatch, privateRequest) => {
     dispatch(failedProcess(error));
   }
 };
-// export const getCertainUser = async (id, privateRequest) => {
-//   try {
-//     const res = await privateRequest.get(`/users/find/${id}`);
-//     return res.data
-//   } catch (error) {
-//     console.log(error)
-//   }
-// };
+
+export const updateNewUserData = async (
+  dispatch,
+  id,
+  privateRequest,
+  userNewData
+) => {
+  dispatch(startProcess);
+  try {
+    const res = await privateRequest.put(`/users/${id}`, userNewData);
+    dispatch(updateUserData({ id, userNewData }));
+  } catch (error) {
+    dispatch(failedProcess(error));
+  }
+};

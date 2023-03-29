@@ -1,0 +1,5 @@
+.hello:focus,
+.hello:active {
+  outline: none !important;
+  border: none !important;
+}

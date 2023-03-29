@@ -1,12 +1,16 @@
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
 import HomeIcon from '@mui/icons-material/Home';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { useState, useEffect } from 'react';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import app from "../firebaseConfig"
+import usePrivateRequest from '../hooks/usePrivateRequestInterceptors';
+import { updateNewUserData } from '../apiCalls';
 
 const Container = styled.div`
   flex: 4;
@@ -179,9 +183,71 @@ const UserUpdateButton = styled.button`
 
 const UserPage = () => {
   const userId = useLocation().pathname.split("/")[2]
+  const privateRequest = usePrivateRequest()
+  const dispatch = useDispatch()
 
   const userData = useSelector(state => state.usersData.usersData.find(user => user._id === userId))
-  console.log(userData)
+  const userInitialState = {
+    username: userData.username,
+    firstname: userData.firstname,
+    lastname: userData.lastname,
+    mobile: userData.mobile,
+    email: userData.email,
+    address: userData.address,
+  }
+  const [userNewData, setUserNewData] = useState(userInitialState)
+
+  const [imageFile, setImageFile] = useState("")
+  const [profileImg, setProfileImg] = useState(userData.img)
+
+  const handleInputChange = (e) => {
+    setUserNewData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  console.log(userNewData)
+  const id = userId
+  useEffect(() => {
+    const handleImgUpload = async () => {
+      const fileName = new Date().getTime() + imageFile.name
+      const storage = getStorage(app); // Create a root reference
+      const storageRef = ref(storage, 'profileImgs/' + fileName);
+      const uploadTask = uploadBytesResumable(storageRef, imageFile);
+      // Listen for state changes, errors, and completion of the upload.
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+            default:
+          }
+        },
+        (error) => {
+          console.log(error)
+        },
+        () => {
+          // Upload completed successfully, now we can get the download URL
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            console.log('File available at', downloadURL);
+            setProfileImg(downloadURL)
+          });
+        }
+      );
+    }
+    imageFile && handleImgUpload()
+  }, [imageFile])
+
+  const handleUpdate = (e) => {
+    e.preventDefault()
+    updateNewUserData(dispatch, id, privateRequest, userNewData)
+  }
+
   return (
     <Container >
       <Titlecontainer>
@@ -225,39 +291,39 @@ const UserPage = () => {
             <UserUpdateLeft>
               <UserUpdateItem>
                 <Label>Username</Label>
-                <InfoInput type={"text"} placeholder={userData.username} />
+                <InfoInput type={"text"} name="username" placeholder={userData.username} onChange={(e) => handleInputChange(e)} />
               </UserUpdateItem>
               <UserUpdateItem>
                 <Label>First name</Label>
-                <InfoInput type={"text"} placeholder={userData.firstname} />
+                <InfoInput type={"text"} name="firstname" placeholder={userData.firstname} onChange={(e) => handleInputChange(e)} />
               </UserUpdateItem>
               <UserUpdateItem>
                 <Label>Last Name</Label>
-                <InfoInput type={"text"} placeholder={userData.lastname} />
+                <InfoInput type={"text"} name="lastname" placeholder={userData.lastname} onChange={(e) => handleInputChange(e)} />
               </UserUpdateItem>
               <UserUpdateItem>
                 <Label>Email</Label>
-                <InfoInput type={"text"} placeholder={userData.email} />
+                <InfoInput type={"text"} name="email" placeholder={userData.email} onChange={(e) => handleInputChange(e)} />
               </UserUpdateItem>
               <UserUpdateItem>
                 <Label>Mobile</Label>
-                <InfoInput type={"number"} placeholder={userData.mobile} />
+                <InfoInput type={"number"} name="mobile" placeholder={userData.mobile} onChange={(e) => handleInputChange(e)} />
               </UserUpdateItem>
               <UserUpdateItem>
                 <Label>Address</Label>
-                <InfoInput type={"text"} placeholder={userData.address} />
+                <InfoInput type={"text"} name="address" placeholder={userData.address} onChange={(e) => handleInputChange(e)} />
               </UserUpdateItem>
             </UserUpdateLeft>
             <UserUpdateRight>
               <UserUpdateUpload>
-                <UserAvatar src={userData.img} />
+                <UserAvatar src={profileImg} />
                 <PublishLabel htmlFor='file'>
                   <FileUploadIcon className='uploadIcon' />
                 </PublishLabel>
-                <UploadInput id='file' type={"file"} />
+                <UploadInput id='file' type={"file"} onChange={(e) => setImageFile(e.target.files[0])} />
               </UserUpdateUpload>
             </UserUpdateRight>
-            <UserUpdateButton>Update</UserUpdateButton>
+            <UserUpdateButton onClick={(e) => handleUpdate(e)}>Update</UserUpdateButton>
           </UserUpdateForm>
         </UserUpdate>
       </UserContainer>

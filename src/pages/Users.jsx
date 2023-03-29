@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { getAllUsers } from "../apiCalls"
 import { useDispatch, useSelector } from "react-redux"
 import usePrivateRequest from "../hooks/usePrivateRequestInterceptors"
+import "./users.css"
 
 const Container = styled.div`
     flex: 4;
@@ -64,7 +65,7 @@ const Users = () => {
   }
 
   const columns = [
-    { field: '_id', headerName: 'ID', width: 200 },
+    { field: '_id', headerName: 'ID', width: 200, },
     {
       field: 'username', headerName: 'Username', width: 180, renderCell: (params) => {
         return (
@@ -89,7 +90,7 @@ const Users = () => {
       field: 'transactions', headerName: 'Transactions', width: 120,
     },
     {
-      field: 'actions', headerName: 'Actions', width: 160, renderCell: (params) => {
+      field: 'actions', cellClassName: "hello", headerName: 'Actions', width: 160, renderCell: (params) => {
         return (
           <Actions>
             <Link to={`/users/${params.row._id}`}>
@@ -114,6 +115,7 @@ const Users = () => {
         rowsPerPageOptions={[5, 10]}
         checkboxSelection
         disableSelectionOnClick
+        style={{ outline: "none" }}
       />
     </Container>
   )
