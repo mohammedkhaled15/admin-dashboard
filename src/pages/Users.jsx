@@ -56,7 +56,6 @@ const Users = () => {
   const users = useSelector(state => state.usersData.usersData)
   const navigate = useNavigate()
   const usersLocation = useLocation()
-  console.log(usersLocation)
 
   useEffect(() => {
     getAllUsers(navigate, usersLocation, dispatch, privateRequest)

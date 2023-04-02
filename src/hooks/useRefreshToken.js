@@ -1,11 +1,9 @@
 import { useDispatch } from "react-redux";
 import { publicRequest } from "../redux/requestMethods";
-import { updateAccessToken } from "../redux/userSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { resetUser, updateAccessToken } from "../redux/userSlice";
+import { persistor } from "./../redux/store";
 
 const useRefreshToken = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const getAccessToken = async () => {
@@ -14,12 +12,14 @@ const useRefreshToken = () => {
         withCredentials: true,
       });
       const { accessToken } = res.data;
-      // console.log(`new One ${accessToken}`);
       dispatch(updateAccessToken(accessToken));
       return accessToken;
     } catch (error) {
       console.log(error);
-      // navigate("/login", { state: { from: location } });
+      if (error.response?.status === 403) {
+        dispatch(resetUser());
+        persistor.purge();
+      }
     }
   };
   return getAccessToken;

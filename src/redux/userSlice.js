@@ -4,7 +4,6 @@ import storage from "redux-persist/lib/storage";
 import { publicRequest } from "./requestMethods";
 
 export const login = async (navigate, from, dispatch, user) => {
-  console.log(from);
   dispatch(loginStart());
   try {
     const res = await publicRequest.post("/auth/login", user, {

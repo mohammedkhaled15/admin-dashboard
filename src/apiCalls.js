@@ -19,9 +19,9 @@ export const getAllUsers = async (
     dispatch(getAllUsersData(res.data));
   } catch (error) {
     dispatch(failedProcess(error));
-    if (error?.response?.status === 403) {
-      dispatch(resetUser()); // any error status from private request === 403 have to reset currnt user data and consequently navigate to login page
-    }
+    // if (error?.response?.status === 403) {
+    //   dispatch(resetUser()); // any error status from private request === 403 have to reset currnt user data and consequently navigate to login page
+    // }
   }
 };
 
