@@ -55,10 +55,11 @@ const Users = () => {
   const privateRequest = usePrivateRequest()
   const users = useSelector(state => state.usersData.usersData)
   const navigate = useNavigate()
-  const location = useLocation()
+  const usersLocation = useLocation()
+  console.log(usersLocation)
 
   useEffect(() => {
-    getAllUsers(navigate, location, dispatch, privateRequest)
+    getAllUsers(navigate, usersLocation, dispatch, privateRequest)
   }, [])
 
 

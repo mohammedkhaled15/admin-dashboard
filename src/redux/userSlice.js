@@ -3,13 +3,15 @@ import { PURGE } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { publicRequest } from "./requestMethods";
 
-export const login = async (dispatch, user) => {
+export const login = async (navigate, from, dispatch, user) => {
+  console.log(from);
   dispatch(loginStart());
   try {
     const res = await publicRequest.post("/auth/login", user, {
       withCredentials: true, // to set cookies httpOnly from backend server
     });
     dispatch(loginSuccess(res.data));
+    navigate(from, { replace: true });
     console.log(res.data);
   } catch (error) {
     dispatch(loginFailure(error?.response?.data));

@@ -16,7 +16,7 @@ const usersDataSlice = createSlice({
     failedProcess: (state, action) => {
       state.isFetching = false;
       state.error = action.payload;
-      console.log(action.payload);
+      // console.log(action.payload);
     },
     getAllUsersData: (state, action) => {
       state.isFetching = false;

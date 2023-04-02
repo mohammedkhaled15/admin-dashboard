@@ -2,7 +2,7 @@ import styled from "styled-components"
 import { useState, useEffect } from "react"
 import { clearError, login } from "../redux/userSlice"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import LoaderSpinner from "../components/LoaderSpinner"
 
 const Container = styled.div`
@@ -52,6 +52,8 @@ function Login() {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname || "/"
 
   useEffect(() => {
     dispatch(clearError())
@@ -59,13 +61,12 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await login(dispatch, { username, password })
+    await login(navigate, from, dispatch, { username, password })
   }
 
   useEffect(() => {
     setPassword("")
     setUsername("")
-    currentUser ? navigate("/home", { replace: true }) : ""
   }, [currentUser])
   return (
     <Container>

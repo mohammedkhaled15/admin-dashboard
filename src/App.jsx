@@ -3,7 +3,7 @@ import TobBar from "./components/TobBar"
 import styled from "styled-components"
 import Home from "./pages/Home"
 import Users from "./pages/Users"
-import { Routes, Route, Navigate } from "react-router-dom"
+import { Routes, Route, Navigate, useLocation } from "react-router-dom"
 import UserPage from "./pages/UserPage"
 import NewUser from "./pages/NewUser"
 import ProductList from "./pages/ProductList"
@@ -23,6 +23,7 @@ const Components = styled.div`
 function App() {
 
   const currentUser = useSelector(state => state.user.currentUser)
+  const location = useLocation()
 
   return (
     <div>
@@ -32,7 +33,7 @@ function App() {
         <Components>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={currentUser ? <SharedLayout /> : <Navigate to={"/login"} replace={true} />}>
+            <Route path="/" element={currentUser ? <SharedLayout /> : <Navigate to={"/login"} state={{ from: location }} replace={true} />}>
               <Route path="/home" element={<Home />} />
               <Route path="/users" element={<Users />} />
               <Route path="/users/:userId" element={<UserPage />} />
@@ -44,7 +45,7 @@ function App() {
           </Routes>
         </Components>
       </Container>
-    </div>
+    </div >
   )
 }
 
