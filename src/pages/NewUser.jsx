@@ -1,6 +1,8 @@
 import styled from 'styled-components'
-import FormInput from '../components/FormInput'
-import { useState } from 'react'
+import { Formik, Form, Field, ErrorMessage } from "formik"
+import * as Yup from "yup"
+import { createNewUser } from '../apiCalls'
+import usePrivateRequest from '../hooks/usePrivateRequestInterceptors'
 
 const Container = styled.div`
   flex: 4;
@@ -8,164 +10,170 @@ const Container = styled.div`
   -moz-box-shadow: 0px 0px 16px -7px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 16px -7px rgba(0,0,0,0.75);
   padding: 20px;
+  button{
+    width: 40%;
+    height: 40px;
+    border: none;
+    background-color: darkblue;
+    color: white;
+    cursor: pointer;
+    padding: 7px 10px;
+    border-radius: 10px;
+    margin-top: 30px;
+    font-weight: 600;
+    &:disabled{
+      background-color: gray;
+      color: darkgray;
+      cursor: default;
+    }
+  }
 `
 const Title = styled.h1`
   margin-bottom: 20px;
 `
-const NewUserForm = styled.form`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-`
-const NewUserFormItem = styled.div`
-  width: 350px;
+const FormControl = styled.div`
+  width: 35%;
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
-  margin-right: 20px;
+  margin:20px 0;
+  input{
+    height: 25px;
+    padding: 5px 10px;
+    border: none;
+    border-bottom: 1px solid gray;
+    border-radius: 2px;
+    font-size: 18px;
+    background-color: none;
+    &:focus{
+    outline: none;
+    }
+    &:invalid{
+      border:solid 2px red;
+    }
+  }
+  
 `
 const Label = styled.label`
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-size: 14px;
   font-weight: 600;
   color: #9b9b9b;
 `
-const Input = styled.input`
-  height: 20px;
-  padding: 5px 10px;
-  border: none;
-  border-bottom: 1px solid gray;
-  border-radius: 5px;
-  font-size: 18px;
-  &:focus{
-    outline: none;
-  }
-`
-const GenderCollection = styled.div`
-  
-`
-const GenderInput = styled.input`
-  margin-top: 14px;
-`
-const GenderLabel = styled.label`
-  margin: 10px;
-  font-size: 18px;
-  color: #555;
-`
-const SelectInput = styled.select`
-  height: 40px;
-  border-radius: 5px;
-`
-const Option = styled.option`
-  
-`
-const SubmitButton = styled.button`
-  width: 200px;
-  border: none;
-  background-color: darkblue;
-  color: white;
-  padding: 7px 10px;
-  border-radius: 10px;
-  margin-top: 30px;
-  cursor: pointer;
-  font-weight: 600;
+const ErrorMsg = styled.label`
+  font-size: 12px;
+  padding: 3px;
+  color: red;
 `
 
+const initialValues = {
+  firstname: "",
+  lastname: "",
+  username: "",
+  password: "",
+  confirmPassword: "",
+  email: "",
+  mobile: "",
+  address: "",
+}
+const onSubmit = (values, privateRequest) => {
+  // console.log(values)
+  createNewUser(privateRequest, values)
+}
+
+const validationSchema = Yup.object({
+  firstname: Yup.string().required("*Required"),
+  lastname: Yup.string().required("*Required"),
+  username: Yup.string().required("*Required").matches(/^[A-Za-z][A-Za-z0-9_]{3,16}$/, "Username should be 3-16 characters and shouldn;t include any special character"),
+  password: Yup.string().required("*Required").matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$/, "It should include at least one letter, one number and one special chracter"),
+  confirmPassword: Yup.string().required("*Required").oneOf([Yup.ref("password")], 'Your passwords do not match.'),
+  email: Yup.string().required("*Required").matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Not Valid Email Address"),
+  mobile: Yup.string().required("*Required").matches(/^[0][0-9]{10}$/, "Not Valid Mobile Number"),
+  address: Yup.string().required("*Required")
+})
+
 const NewUser = () => {
-  const [values, setValues] = useState({
-    username: "",
-    password: "",
-    email: "",
-    mobile: "",
-    address: ""
-  })
+
+  const privateRequest = usePrivateRequest()
+
   const Inputs = [
     {
-      id: 1,
+      name: "firstname",
+      type: "text",
+      placeholder: "Firstname",
+    },
+    {
+      name: "lastname",
+      type: "text",
+      placeholder: "Lastname",
+    },
+    {
       name: "username",
       type: "text",
       placeholder: "Username",
-      label: "Username"
     },
     {
-      id: 2,
       name: "password",
       type: "password",
       placeholder: "Password",
-      label: "Password"
     },
     {
-      id: 3,
+      name: "confirmPassword",
+      type: "password",
+      placeholder: "Confirm Password",
+    },
+    {
       name: "email",
       type: "email",
       placeholder: "Email",
-      label: "Email"
     },
     {
-      id: 4,
       name: "mobile",
       type: "tel",
       placeholder: "Mobile",
-      label: "Mobile"
     },
     {
-      id: 5,
       name: "address",
       type: "text",
       placeholder: "Address",
-      label: "Address"
     },
   ]
-
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value })
-  }
 
   return (
     <Container>
       <Title>New User</Title>
-      <NewUserForm>
-        {Inputs.map(input => (
-          <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChange} />
-        ))}
-        {/* <NewUserFormItem>
-          <Label>Username</Label>
-          <Input type={"text"} placeholder="Username" />
-        </NewUserFormItem>
-        <NewUserFormItem>
-          <Label>Email</Label>
-          <Input type={"text"} placeholder="Email" />
-        </NewUserFormItem>
-        <NewUserFormItem>
-          <Label>Password</Label>
-          <Input type={"password"} placeholder="Password" />
-        </NewUserFormItem>
-        <NewUserFormItem>
-          <Label>Phone</Label>
-          <Input type={"number"} placeholder="Phone" />
-        </NewUserFormItem>
-        <NewUserFormItem>
-          <Label>Address</Label>
-          <Input type={"text"} placeholder="Address" />
-        </NewUserFormItem> */}
-        <NewUserFormItem>
-          <Label>Gender</Label>
-          <GenderCollection>
-            <GenderInput type={"radio"} name="gender" id='male' value={"male"} />
-            <GenderLabel htmlFor='male'>Male</GenderLabel>
-            <GenderInput type={"radio"} name="gender" id='female' value={"female"} />
-            <GenderLabel htmlFor='female'>Female</GenderLabel>
-          </GenderCollection>
-        </NewUserFormItem>
-        <NewUserFormItem>
-          <Label>Active</Label>
-          <SelectInput name='active' id="active">
-            <Option value={"yes"}>Yes</Option>
-            <Option value={"no"}>No</Option>
-          </SelectInput>
-        </NewUserFormItem>
-        <SubmitButton>Create</SubmitButton>
-      </NewUserForm>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => onSubmit(values, privateRequest)} validateOnChange>
+        {
+          formik => {
+            // console.log(formik)
+            return (
+              <Form style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-evenly" }}>
+                {Inputs.map((input, index) => {
+                  return (
+                    <FormControl key={index}>
+                      <Label htmlFor={input.name}>{input.name.toUpperCase()}</Label>
+                      {/* <Field type={input.type} name={input.name} id={input.name} /> */}
+                      <Field name={input.name} >
+                        {
+                          props => {
+                            const { field, form, meta } = props
+                            return (
+                              <input id={input.name} type={input.type} {...field} style={(meta.error && meta.touched) ? { border: "solid red 1px" } : null} />
+                            )
+                          }
+                        }
+                      </Field>
+                      <ErrorMessage name={input.name}>
+                        {error => <ErrorMsg>{error}</ErrorMsg>}
+                      </ErrorMessage>
+                    </FormControl>
+                  )
+                })}
+                <button type='submit' disabled={!(formik.dirty && formik.isValid)}>Create</button>
+              </Form>
+            )
+          }
+        }
+      </Formik>
     </Container>
   )
 }

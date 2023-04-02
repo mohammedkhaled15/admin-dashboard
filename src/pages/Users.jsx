@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getAllUsers } from "../apiCalls"
 import { useDispatch, useSelector } from "react-redux"
@@ -54,9 +54,11 @@ const Users = () => {
   const dispatch = useDispatch()
   const privateRequest = usePrivateRequest()
   const users = useSelector(state => state.usersData.usersData)
+  const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
-    getAllUsers(dispatch, privateRequest)
+    getAllUsers(navigate, location, dispatch, privateRequest)
   }, [])
 
 

@@ -115,7 +115,7 @@ const TobBar = () => {
           <IconContainer>
             <SettingsIcon />
           </IconContainer>
-          <ProfileImage src={loggedUser.img || "../../../public/assits/user1.jpg"} />
+          <ProfileImage src={loggedUser?.img || "../../../public/assits/defaultUser.png"} />
         </TopRight>
       </Wrapper>
     </Container>
