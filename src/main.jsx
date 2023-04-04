@@ -12,9 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
-        {/* <HashRouter> */}
-        <App />
-        {/* </HashRouter> */}
+        <HashRouter basename='/'>
+          <App />
+        </HashRouter>
       </BrowserRouter>
     </PersistGate>
   </Provider>
