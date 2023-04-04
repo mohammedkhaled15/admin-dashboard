@@ -12,6 +12,16 @@ const Container = styled.div`
   flex: 4;
   height: 80vh;
 `
+const NewProdutcButton = styled.button`
+  width: 80px;
+  border: none;
+  padding: 5px;
+  background-color: teal;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+`
 const UserInfoContainer = styled.div`
   display: flex;
   align-items: center;
@@ -112,6 +122,9 @@ export default function ProductList() {
 
   return (
     <Container>
+      <Link to={"/newProduct"}>
+        <NewProdutcButton>Create</NewProdutcButton>
+      </Link>
       <DataGrid
         rows={products}
         getRowId={row => row._id}
