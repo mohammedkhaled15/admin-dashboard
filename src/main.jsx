@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import {
-  BrowserRouter,
+  BrowserRouter, HashRouter
 } from "react-router-dom";
 import { Provider } from 'react-redux';
 import { store, persistor } from "./redux/store.js";
@@ -12,7 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
-        <App />
+        <HashRouter>
+          <App />
+        </HashRouter>
       </BrowserRouter>
     </PersistGate>
   </Provider>

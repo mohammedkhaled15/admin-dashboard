@@ -115,7 +115,7 @@ const TobBar = () => {
           <IconContainer>
             <SettingsIcon />
           </IconContainer>
-          <ProfileImage src={loggedUser?.img || "../../../public/assits/defaultUser.png"} />
+          <ProfileImage src={loggedUser?.img || "https://firebasestorage.googleapis.com/v0/b/ecommerce-images-pr.appspot.com/o/profileImgs%2FdefaultUser.png?alt=media&token=9387917b-a5a8-490d-968c-b8da0e1c9b1f"} />
         </TopRight>
       </Wrapper>
     </Container>

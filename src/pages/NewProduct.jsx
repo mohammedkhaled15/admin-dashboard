@@ -191,7 +191,7 @@ const NewProduct = () => {
         </ProductFormLeft>
         <ProductFormRight>
           <ProductUpdateImage>
-            <ProductUpdatedImg src={imageLink || "../../public/assits/defaultUser.png"} />
+            <ProductUpdatedImg src={imageLink || "https://firebasestorage.googleapis.com/v0/b/ecommerce-images-pr.appspot.com/o/images%2Fdefault-product.png?alt=media&token=303d08ae-ada8-401a-bb99-1bc1e82ec7f0"} />
             <UploadLabel htmlFor='file'>
               <FileUploadIcon />
             </UploadLabel>
