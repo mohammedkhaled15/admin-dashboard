@@ -34,7 +34,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={currentUser ? <SharedLayout /> : <Navigate to={"/login"} state={{ from: location }} replace={true} />}>
-              <Route path="/home" exact element={<Home />} />
+              <Route path="/" exact element={<Home />} />
               <Route path="/users" element={<Users />} />
               <Route path="/users/:userId" element={<UserPage />} />
               <Route path="/newUser" element={<NewUser />} />
