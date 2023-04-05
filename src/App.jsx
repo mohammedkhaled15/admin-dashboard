@@ -33,7 +33,7 @@ function App() {
         <Components>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={currentUser ? <SharedLayout /> : <Navigate to={"/login"} state={{ from: location }} replace={true} />}>
+            <Route path="/home" element={currentUser ? <SharedLayout /> : <Navigate to={"/login"} state={{ from: location }} replace={true} />}>
               <Route path="/home" element={<Home />} />
               <Route path="/users" element={<Users />} />
               <Route path="/users/:userId" element={<UserPage />} />
