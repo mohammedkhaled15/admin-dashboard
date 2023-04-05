@@ -75,9 +75,12 @@ const initialValues = {
   mobile: "",
   address: "",
 }
-const onSubmit = (values, privateRequest) => {
+const onSubmit = async (values, onSubmitProps, privateRequest) => {
   // console.log(values)
-  createNewUser(privateRequest, values)
+  await createNewUser(privateRequest, values)
+  // console.log(onSubmitProps)
+  onSubmitProps.setSubmitting(false)
+  onSubmitProps.resetForm()
 }
 
 const validationSchema = Yup.object({
@@ -141,7 +144,7 @@ const NewUser = () => {
   return (
     <Container>
       <Title>New User</Title>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => onSubmit(values, privateRequest)} validateOnChange>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values, onSubmitProps) => onSubmit(values, onSubmitProps, privateRequest)} validateOnChange>
         {
           formik => {
             // console.log(formik)
@@ -168,7 +171,7 @@ const NewUser = () => {
                     </FormControl>
                   )
                 })}
-                <button type='submit' disabled={!(formik.dirty && formik.isValid)}>Create</button>
+                <button type='submit' disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}>Create</button>
               </Form>
             )
           }

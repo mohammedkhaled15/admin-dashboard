@@ -6,6 +6,9 @@ import app from "../firebaseConfig"
 import { useDispatch } from "react-redux"
 import { createProductsuccess, failedProcess, startProcess } from '../redux/productSlice';
 import usePrivateRequest from '../hooks/usePrivateRequestInterceptors';
+import * as Yup from "yup"
+import { Formik, Form, Field, ErrorMessage } from "formik"
+
 
 const Container = styled.div`
   flex: 4;
@@ -81,6 +84,31 @@ const SubmitButton = styled.button`
   margin: 20px;
   letter-spacing: 6px;
 `
+
+const initialValues = {
+  prodName: "",
+  prodDesc: "",
+  prodCat: "",
+  prodColors: "",
+  prodSizes: "",
+  prodPrice: "",
+  inStock: "",
+  prodImg: ""
+}
+const onSubmit = (values) => {
+  console.log(values)
+}
+
+const validationSchema = Yup.object({
+  prodName: Yup.string().required("*Required"),
+  prodDesc: Yup.string().required("*Required"),
+  prodCat: Yup.string().required("*Required"),
+  prodColors: Yup.string().required("*Required"),
+  prodSizes: Yup.string().required("*Required"),
+  prodPrice: Yup.number().required("*Required"),
+  inStock: Yup.boolean().required("*Required"),
+  prodImg: Yup.string().required("*Required")
+})
 
 const NewProduct = () => {
 
@@ -158,6 +186,49 @@ const NewProduct = () => {
       }
     );
   }
+
+  const Inputs = [
+    {
+      name: "prodName",
+      type: "text",
+      placeholder: "Product Name",
+    },
+    {
+      name: "prodDesc",
+      type: "text",
+      placeholder: "Product Description",
+    },
+    {
+      name: "prodCat",
+      type: "text",
+      placeholder: "Product Categories (jeans,dresses)",
+    },
+    {
+      name: "prodColors",
+      type: "text",
+      placeholder: "Product Colors (red, yellow)",
+    },
+    {
+      name: "prodSizes",
+      type: "password",
+      placeholder: "Product Sizes (XL, M) OR (42,43)",
+    },
+    {
+      name: "prodPrice",
+      type: "number",
+      placeholder: "Product Price",
+    },
+    {
+      name: "inStock",
+      type: "select",
+      placeholder: "Mobile",
+    },
+    {
+      name: "address",
+      type: "text",
+      placeholder: "Address",
+    },
+  ]
 
   return (
     <Container>
