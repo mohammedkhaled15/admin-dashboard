@@ -1,8 +1,9 @@
 import styled from 'styled-components'
-import { Formik, Form, Field, ErrorMessage } from "formik"
 import * as Yup from "yup"
 import { createNewUser } from '../apiCalls'
 import usePrivateRequest from '../hooks/usePrivateRequestInterceptors'
+import FormikContainer from '../components/FormikContainer'
+import FormikControl from '../components/FormikControl'
 
 const Container = styled.div`
   flex: 4;
@@ -10,7 +11,7 @@ const Container = styled.div`
   -moz-box-shadow: 0px 0px 16px -7px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 16px -7px rgba(0,0,0,0.75);
   padding: 20px;
-  button{
+  /* button{
     width: 40%;
     height: 40px;
     border: none;
@@ -26,7 +27,7 @@ const Container = styled.div`
       color: darkgray;
       cursor: default;
     }
-  }
+  } */
 `
 const Title = styled.h1`
   margin-bottom: 20px;
@@ -76,8 +77,8 @@ const initialValues = {
   address: "",
 }
 const onSubmit = async (values, onSubmitProps, privateRequest) => {
-  // console.log(values)
-  await createNewUser(privateRequest, values)
+  console.log(values)
+  // await createNewUser(privateRequest, values)
   // console.log(onSubmitProps)
   onSubmitProps.setSubmitting(false)
   onSubmitProps.resetForm()
@@ -98,43 +99,51 @@ const NewUser = () => {
 
   const privateRequest = usePrivateRequest()
 
-  const Inputs = [
+  const inputs = [
     {
+      label: "firstname",
       name: "firstname",
       type: "text",
-      placeholder: "Firstname",
+      placeholder: "Your Firstname",
     },
     {
+      label: "lastname",
       name: "lastname",
       type: "text",
-      placeholder: "Lastname",
+      placeholder: "Your Lastname",
     },
     {
+      label: "username",
       name: "username",
       type: "text",
-      placeholder: "Username",
+      placeholder: "Choose a username",
     },
     {
+      label: "password",
       name: "password",
       type: "password",
-      placeholder: "Password",
+      placeholder: "Type a difficult password",
     },
     {
+      label: "Confirm Password",
       name: "confirmPassword",
       type: "password",
       placeholder: "Confirm Password",
     },
     {
+      label: "Email",
       name: "email",
       type: "email",
       placeholder: "Email",
     },
     {
+      label: "Mobile Number",
       name: "mobile",
       type: "tel",
       placeholder: "Mobile",
     },
     {
+      label: "Address",
       name: "address",
       type: "text",
       placeholder: "Address",
@@ -144,39 +153,13 @@ const NewUser = () => {
   return (
     <Container>
       <Title>New User</Title>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values, onSubmitProps) => onSubmit(values, onSubmitProps, privateRequest)} validateOnChange>
+      <FormikContainer initialValues={initialValues} validateSchema={validationSchema} onSubmit={onSubmit} buttonAction={"Create"}>
         {
-          formik => {
-            // console.log(formik)
-            return (
-              <Form style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-evenly" }}>
-                {Inputs.map((input, index) => {
-                  return (
-                    <FormControl key={index}>
-                      <Label htmlFor={input.name}>{input.name.toUpperCase()}</Label>
-                      {/* <Field type={input.type} name={input.name} id={input.name} /> */}
-                      <Field name={input.name} >
-                        {
-                          props => {
-                            const { field, form, meta } = props
-                            return (
-                              <input id={input.name} type={input.type} {...field} style={(meta.error && meta.touched) ? { border: "solid red 1px" } : null} />
-                            )
-                          }
-                        }
-                      </Field>
-                      <ErrorMessage name={input.name}>
-                        {error => <ErrorMsg>{error}</ErrorMsg>}
-                      </ErrorMessage>
-                    </FormControl>
-                  )
-                })}
-                <button type='submit' disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}>Create</button>
-              </Form>
-            )
-          }
+          inputs.map(input => (
+            <FormikControl key={input.name} control="input" label={input.label} name={input.name} type={input.type} placeholder={input.placeholder} />
+          ))
         }
-      </Formik>
+      </FormikContainer>
     </Container>
   )
 }

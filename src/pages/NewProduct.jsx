@@ -17,9 +17,58 @@ const Container = styled.div`
   box-shadow: 0px 0px 16px -7px rgba(0,0,0,0.75);
   padding: 20px;
   margin: 15px;
+  button{
+    width: 40%;
+    height: 40px;
+    border: none;
+    background-color: darkblue;
+    color: white;
+    cursor: pointer;
+    padding: 7px 10px;
+    border-radius: 10px;
+    margin-top: 30px;
+    font-weight: 600;
+    &:disabled{
+      background-color: gray;
+      color: darkgray;
+      cursor: default;
+    }
+  }
 `
 const Title = styled.h1`
   margin-bottom: 20px;
+`
+const FormControl = styled.div`
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+  margin:20px 0;
+  input{
+    height: 25px;
+    padding: 5px 10px;
+    border: none;
+    border-bottom: 1px solid gray;
+    border-radius: 2px;
+    font-size: 18px;
+    background-color: none;
+    &:focus{
+    outline: none;
+    }
+    &:invalid{
+      border:solid 2px red;
+    }
+  }
+`
+const Label = styled.label`
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #9b9b9b;
+`
+const ErrorMsg = styled.label`
+  font-size: 12px;
+  padding: 3px;
+  color: red;
 `
 const ProductForm = styled.form`
   display: flex;
@@ -138,8 +187,6 @@ const NewProduct = () => {
     setSizes(e.target.value.split(","))
   }
 
-  console.log(colors, sizes)
-
   const addNewProduct = async (product) => {
     dispatch(startProcess())
     try {
@@ -220,20 +267,69 @@ const NewProduct = () => {
     },
     {
       name: "inStock",
+      control: "select",
       type: "select",
       placeholder: "Mobile",
     },
     {
-      name: "address",
+      name: "img",
       type: "text",
-      placeholder: "Address",
+      placeholder: "Image",
     },
   ]
 
   return (
     <Container>
       <Title>New Product</Title>
-      <ProductForm>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values, onSubmitProps) => onSubmit(values, onSubmitProps, privateRequest)} validateOnChange>
+        {
+          formik => {
+            return (
+              <Form style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-evenly" }}>
+                {Inputs.map((input, index) => {
+                  switch (input.control) {
+                    case ("select"): return (
+                      <FormControl key={index}>
+                        <Label htmlFor={input.name}>{input.name.toUpperCase()}</Label>
+                        <Field name={input.name} as={input.control}>
+                          {
+                            ["Yes", "No"].map(option => (
+                              <option key={option} value={option}>{option}</option>
+                            ))
+                          }
+                        </Field>
+                        <ErrorMessage name={input.name}>
+                          {error => <ErrorMsg>{error}</ErrorMsg>}
+                        </ErrorMessage>
+                      </FormControl>
+                    )
+                    default: return (
+                      <FormControl key={index}>
+                        <Label htmlFor={input.name}>{input.name.toUpperCase()}</Label>
+                        <Field name={input.name} >
+                          {
+                            props => {
+                              const { field, form, meta } = props
+                              return (
+                                <input id={input.name} type={input.type} {...field} style={(meta.error && meta.touched) ? { border: "solid red 1px" } : null} />
+                              )
+                            }
+                          }
+                        </Field>
+                        <ErrorMessage name={input.name}>
+                          {error => <ErrorMsg>{error}</ErrorMsg>}
+                        </ErrorMessage>
+                      </FormControl>
+                    )
+                  }
+                })}
+                <button type='submit' disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}>Create</button>
+              </Form>
+            )
+          }
+        }
+      </Formik>
+      {/* <ProductForm>
         <ProductFormLeft>
           <ProductLabel>Product Name</ProductLabel>
           <ProductInput onChange={(e) => handleChange(e)} name='title' type={"text"} placeholder="Apple Airpod" />
@@ -271,7 +367,7 @@ const NewProduct = () => {
           </ProductUpdateImage>
         </ProductFormRight>
         <SubmitButton onClick={(e) => handleSubmit(e)}>Create</SubmitButton>
-      </ProductForm>
+      </ProductForm> */}
     </Container>
   )
 }
