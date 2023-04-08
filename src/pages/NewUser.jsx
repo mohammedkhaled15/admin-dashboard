@@ -3,7 +3,7 @@ import * as Yup from "yup"
 import { createNewUser } from '../apiCalls'
 import usePrivateRequest from '../hooks/usePrivateRequestInterceptors'
 import FormikContainer from '../components/FormikContainer'
-import FormikControl from '../components/FormikControl'
+import FormikControl from '../components/Formikcontrol'
 
 const Container = styled.div`
   flex: 4;
@@ -11,59 +11,9 @@ const Container = styled.div`
   -moz-box-shadow: 0px 0px 16px -7px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 16px -7px rgba(0,0,0,0.75);
   padding: 20px;
-  /* button{
-    width: 40%;
-    height: 40px;
-    border: none;
-    background-color: darkblue;
-    color: white;
-    cursor: pointer;
-    padding: 7px 10px;
-    border-radius: 10px;
-    margin-top: 30px;
-    font-weight: 600;
-    &:disabled{
-      background-color: gray;
-      color: darkgray;
-      cursor: default;
-    }
-  } */
 `
 const Title = styled.h1`
   margin-bottom: 20px;
-`
-const FormControl = styled.div`
-  width: 35%;
-  display: flex;
-  flex-direction: column;
-  margin:20px 0;
-  input{
-    height: 25px;
-    padding: 5px 10px;
-    border: none;
-    border-bottom: 1px solid gray;
-    border-radius: 2px;
-    font-size: 18px;
-    background-color: none;
-    &:focus{
-    outline: none;
-    }
-    &:invalid{
-      border:solid 2px red;
-    }
-  }
-  
-`
-const Label = styled.label`
-  margin-bottom: 5px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #9b9b9b;
-`
-const ErrorMsg = styled.label`
-  font-size: 12px;
-  padding: 3px;
-  color: red;
 `
 
 const initialValues = {
@@ -78,7 +28,7 @@ const initialValues = {
 }
 const onSubmit = async (values, onSubmitProps, privateRequest) => {
   console.log(values)
-  // await createNewUser(privateRequest, values)
+  await createNewUser(privateRequest, values)
   // console.log(onSubmitProps)
   onSubmitProps.setSubmitting(false)
   onSubmitProps.resetForm()
@@ -153,7 +103,7 @@ const NewUser = () => {
   return (
     <Container>
       <Title>New User</Title>
-      <FormikContainer initialValues={initialValues} validateSchema={validationSchema} onSubmit={onSubmit} buttonAction={"Create"}>
+      <FormikContainer initialValues={initialValues} validateSchema={validationSchema} onSubmit={(values, onSubmitProps) => onSubmit(values, onSubmitProps, privateRequest)} buttonAction={"Create"}>
         {
           inputs.map(input => (
             <FormikControl key={input.name} control="input" label={input.label} name={input.name} type={input.type} placeholder={input.placeholder} />

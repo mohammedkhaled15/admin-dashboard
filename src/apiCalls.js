@@ -6,12 +6,7 @@ import {
 } from "./redux/usersDataSlice";
 import { resetUser } from "./redux/userSlice";
 
-export const getAllUsers = async (
-  navigate,
-  location,
-  dispatch,
-  privateRequest
-) => {
+const getAllUsers = async (navigate, location, dispatch, privateRequest) => {
   dispatch(startProcess);
   try {
     const res = await privateRequest.get("users/findall");
@@ -25,12 +20,7 @@ export const getAllUsers = async (
   }
 };
 
-export const updateNewUserData = async (
-  dispatch,
-  id,
-  privateRequest,
-  userNewData
-) => {
+const updateNewUserData = async (dispatch, id, privateRequest, userNewData) => {
   dispatch(startProcess);
   try {
     const res = await privateRequest.put(`/users/${id}`, userNewData);
@@ -40,7 +30,7 @@ export const updateNewUserData = async (
   }
 };
 
-export const createNewUser = async (privateRequest, newUser) => {
+const createNewUser = async (privateRequest, newUser) => {
   try {
     const res = await privateRequest.post("/auth/register", newUser);
     console.log(res);
@@ -48,3 +38,5 @@ export const createNewUser = async (privateRequest, newUser) => {
     console.log(error);
   }
 };
+
+export { createNewUser, updateNewUserData, getAllUsers };

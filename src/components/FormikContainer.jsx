@@ -1,8 +1,8 @@
-import { Formik, Form } from "formik"
 import styled from "styled-components"
+import { Formik, Form } from "formik"
 
 const Button = styled.button`
-  width: 40%;
+  width: 70%;
   height: 40px;
   border: none;
   background-color: darkblue;
