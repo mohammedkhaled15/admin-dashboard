@@ -3,7 +3,7 @@ import * as Yup from "yup"
 import { createNewUser } from '../apiCalls'
 import usePrivateRequest from '../hooks/usePrivateRequestInterceptors'
 import FormikContainer from '../components/FormikContainer'
-import FormikControl from '../components/Formikcontrol'
+import FormikControl from '../components/FormikControl'
 
 const Container = styled.div`
   flex: 4;
@@ -29,7 +29,6 @@ const initialValues = {
 const onSubmit = async (values, onSubmitProps, privateRequest) => {
   console.log(values)
   await createNewUser(privateRequest, values)
-  // console.log(onSubmitProps)
   onSubmitProps.setSubmitting(false)
   onSubmitProps.resetForm()
 }

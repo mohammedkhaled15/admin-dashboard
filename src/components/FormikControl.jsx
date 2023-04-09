@@ -63,47 +63,44 @@ const ImgPreview = styled.img`
   object-fit: cover;
   `
 
-const FormikControl = ({ control, label, name, options, img, onFileChange, type, ...rest }) => {
+const FormikControl = ({ control, label, name, options, img, type, ...rest }) => {
 
-  const [fileToUpload, setFileToUpload] = useState("")
   const [profileImg, setProfileImg] = useState("https://firebasestorage.googleapis.com/v0/b/ecommerce-images-pr.appspot.com/o/images%2Fdefault-product.png?alt=media&token=303d08ae-ada8-401a-bb99-1bc1e82ec7f0")
 
-  useEffect(() => {
-    const handleImgUpload = async () => {
-      const fileName = new Date().getTime() + fileToUpload.name
-      const storage = getStorage(app); // Create a root reference
-      const storageRef = ref(storage, 'images/' + fileName);
-      const uploadTask = uploadBytesResumable(storageRef, fileToUpload);
-      // Listen for state changes, errors, and completion of the upload.
-      uploadTask.on('state_changed',
-        (snapshot) => {
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused');
-              break;
-            case 'running':
-              console.log('Upload is running');
-              break;
-            default:
-          }
-        },
-        (error) => {
-          console.log(error)
-        },
-        () => {
-          // Upload completed successfully, now we can get the download URL
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            console.log('File available at', downloadURL);
-            setProfileImg(downloadURL)
-          });
+  const handleImgUpload = async (e, setFieldValue) => {
+    const fileName = new Date().getTime() + e.target.files[0].name
+    const storage = getStorage(app); // Create a root reference
+    const storageRef = ref(storage, 'images/' + fileName);
+    const uploadTask = uploadBytesResumable(storageRef, e.target.files[0]);
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+          default:
         }
-      );
-    }
-    fileToUpload && handleImgUpload()
-  }, [fileToUpload])
+      },
+      (error) => {
+        console.log(error)
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          console.log('File available at', downloadURL);
+          setProfileImg(downloadURL)
+          setFieldValue("img", downloadURL)
+        });
+      }
+    );
+  }
 
 
   switch (control) {
@@ -113,7 +110,7 @@ const FormikControl = ({ control, label, name, options, img, onFileChange, type,
         <Label htmlFor={name}>{label.toUpperCase()}</Label>
         <Field as="select" id={name} name={name}>
           {
-            options.map(option => (
+            options?.map(option => (
               <InStockOption key={option.key} value={option.value}>{option.key}</InStockOption>
             ))
           }
@@ -130,13 +127,11 @@ const FormikControl = ({ control, label, name, options, img, onFileChange, type,
         <Field id={name} name={name}>
           {
             ({ field, form, meta }) => {
-              console.log(form)
               return (
                 <input
                   id={name}
-                  // value={meta.value}
                   type={type}
-                  onChange={e => { setFileToUpload(e.target.files[0]); form.setFieldValue("file", profileImg) }}
+                  onChange={e => { handleImgUpload(e, form.setFieldValue) }}
                 />
               )
             }

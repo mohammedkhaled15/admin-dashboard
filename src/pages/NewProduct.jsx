@@ -3,6 +3,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import * as Yup from "yup"
 import FormikContainer from '../components/FormikContainer';
 import FormikControl from '../components/FormikControl';
+import { privateRequest } from '../redux/requestMethods';
 
 const Container = styled.div`
   flex: 4;
@@ -13,17 +14,29 @@ const Title = styled.h1`
   margin-bottom: 20px;
 `
 const initialValues = {
-  prodName: "",
-  prodDesc: "",
-  prodCat: "",
-  prodColors: "",
-  prodSizes: "",
-  prodPrice: "",
+  title: "",
+  dec: "",
+  categories: "",
+  colors: "",
+  size: "",
+  price: "",
   inStock: "",
-  prodImg: ""
+  img: ""
 }
-const onSubmit = (values) => {
-  console.log({ ...values })
+const onSubmit = async (values, { resetForm }) => {
+  try {
+    const res = await privateRequest.post("/products", {
+      categories: values.categories.split(","),
+      colors: values.colors.split(","),
+      size: values.size.split(","),
+      ...values
+    })
+    console.log(res)
+    console.log("initialValues: ", values)
+    resetForm()
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const validationSchema = Yup.object({
@@ -34,41 +47,42 @@ const validationSchema = Yup.object({
   prodSizes: Yup.string().required("*Required"),
   prodPrice: Yup.number().required("*Required"),
   inStock: Yup.boolean().required("*Required"),
+  prodImg: Yup.string().required("*Required"),
 })
 
 const inputs = [
   {
-    name: "prodName",
+    name: "title",
     label: "Product Name",
     type: "text",
     placeholder: "Product Name",
   },
   {
-    name: "prodDesc",
+    name: "desc",
     label: "Product Description",
     type: "text",
     placeholder: "Product Description",
   },
   {
-    name: "prodCat",
+    name: "categories",
     label: "Product Category",
     type: "text",
     placeholder: "Product Categories (jeans,dresses)",
   },
   {
-    name: "prodColors",
+    name: "colors",
     label: "Product Colors",
     type: "text",
     placeholder: "Product Colors (red, yellow)",
   },
   {
-    name: "prodSizes",
+    name: "size",
     label: "Product Sizes",
     type: "password",
     placeholder: "Product Sizes (XL, M) OR (42,43)",
   },
   {
-    name: "prodPrice",
+    name: "price",
     label: "Product Price",
     type: "number",
     placeholder: "Product Price",
@@ -81,7 +95,7 @@ const inputs = [
     inStockOptions: [{ key: "Select Option", value: "" }, { key: "Yes", value: true }, { key: "No", value: false }]
   },
   {
-    name: "prodImg",
+    name: "img",
     control: "imgUpload",
     label: <FileUploadIcon />,
     type: "file",
@@ -96,7 +110,7 @@ const NewProduct = () => {
       <FormikContainer initialValues={initialValues} validateSchema={validationSchema} onSubmit={onSubmit} buttonAction={"Create"}>
         {
           inputs.map(input => (
-            <FormikControl key={input.name} control={input.control} label={input.label} name={input.name} type={input.type} placeholder={input.placeholder} options={input.control === "select" ? input.inStockOptions : null} />
+            <FormikControl key={input.name} control={input.control} label={input.label} name={input.name} type={input.type} placeholder={input.placeholder} options={input.inStockOptions} />
           ))
         }
       </FormikContainer>
