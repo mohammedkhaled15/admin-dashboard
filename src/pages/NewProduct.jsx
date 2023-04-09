@@ -23,21 +23,6 @@ const initialValues = {
   inStock: "",
   img: ""
 }
-const onSubmit = async (values, { resetForm }) => {
-  try {
-    const res = await privateRequest.post("/products", {
-      categories: values.categories.split(","),
-      colors: values.colors.split(","),
-      size: values.size.split(","),
-      ...values
-    })
-    console.log(res)
-    console.log("initialValues: ", values)
-    resetForm()
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 const validationSchema = Yup.object({
   title: Yup.string().required("*Required"),
@@ -121,7 +106,6 @@ const NewProduct = () => {
       console.log(error)
     }
   }
-
 
   return (
     <Container>
