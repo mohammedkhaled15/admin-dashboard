@@ -3,7 +3,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import * as Yup from "yup"
 import FormikContainer from '../components/FormikContainer';
 import FormikControl from '../components/FormikControl';
-import { privateRequest } from '../redux/requestMethods';
+import usePrivateRequest from '../hooks/usePrivateRequestInterceptors';
 
 const Container = styled.div`
   flex: 4;
@@ -40,14 +40,14 @@ const onSubmit = async (values, { resetForm }) => {
 }
 
 const validationSchema = Yup.object({
-  prodName: Yup.string().required("*Required"),
-  prodDesc: Yup.string().required("*Required"),
-  prodCat: Yup.string().required("*Required"),
-  prodColors: Yup.string().required("*Required"),
-  prodSizes: Yup.string().required("*Required"),
-  prodPrice: Yup.number().required("*Required"),
+  title: Yup.string().required("*Required"),
+  desc: Yup.string().required("*Required"),
+  categories: Yup.string().required("*Required"),
+  colors: Yup.string().required("*Required"),
+  size: Yup.string().required("*Required"),
+  price: Yup.number().required("*Required"),
   inStock: Yup.boolean().required("*Required"),
-  prodImg: Yup.string().required("*Required"),
+  img: Yup.string().required("*Required"),
 })
 
 const inputs = [
@@ -103,6 +103,25 @@ const inputs = [
 ]
 
 const NewProduct = () => {
+
+  const privateRequest = usePrivateRequest()
+
+  const onSubmit = async (values, { resetForm }) => {
+    try {
+      const res = await privateRequest.post("/products", {
+        categories: values.categories.split(","),
+        colors: values.colors.split(","),
+        size: values.size.split(","),
+        ...values
+      })
+      console.log(res)
+      console.log("initialValues: ", values)
+      resetForm()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   return (
     <Container>

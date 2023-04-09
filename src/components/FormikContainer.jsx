@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import { Formik, Form } from "formik"
+import { withFormikDevtools } from 'formik-devtools-extension';
 
 const Button = styled.button`
   width: 70%;
@@ -28,14 +29,18 @@ const FormikContainer = ({ initialValues, validateSchema, onSubmit, buttonAction
       validateOnChange
     >
       {
-        formik =>
-          <Form style={{ flex: "4", display: "flex", flexWrap: "wrap", justifyContent: "space-evenly", boxShadow: "0px 0px 16px -7px rgba(0,0,0,0.75)", padding: "20px", borderRadius: "10px" }}>
-            {children}
-            <Button
-              type='submit'
-              disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}>{buttonAction}
-            </Button>
-          </Form>
+        formik => {
+          withFormikDevtools(formik);
+          return (
+            <Form style={{ flex: "4", display: "flex", flexWrap: "wrap", justifyContent: "space-evenly", boxShadow: "0px 0px 16px -7px rgba(0,0,0,0.75)", padding: "20px", borderRadius: "10px" }}>
+              {children}
+              <Button
+                type='submit'
+                disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}>{buttonAction}
+              </Button>
+            </Form>
+          )
+        }
       }
     </Formik >
   )
