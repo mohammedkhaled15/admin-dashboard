@@ -21,6 +21,17 @@ const UserInfoContainer = styled.div`
   display: flex;
   align-items: center;
 `
+const AddNewUser = styled.button`
+  width: 80px;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: teal;
+  color: white;
+  font-size: 16px;
+`
+const Actions = styled.div``
 const Image = styled.img`
   width: 32px;
   height: 32px;
@@ -113,6 +124,9 @@ const Users = () => {
 
   return (
     <Container>
+      <Link to={"/newUser"}>
+        <AddNewUser>Create</AddNewUser>
+      </Link>
       <DataGrid
         rows={users}
         columns={columns}
