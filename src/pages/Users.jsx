@@ -7,8 +7,8 @@ import { useEffect } from 'react';
 import { getAllUsers } from "../apiCalls"
 import { useDispatch, useSelector } from "react-redux"
 import usePrivateRequest from "../hooks/usePrivateRequestInterceptors"
-import { deleteProductsSuccess, failedProcess, startProcess } from '../redux/productSlice';
 import "./users.css"
+import { deleteUserSuccess, failedProcess, startProcess } from '../redux/usersDataSlice';
 
 const Container = styled.div`
     flex: 4;
@@ -71,11 +71,13 @@ const Users = () => {
   }, [])
 
 
-  const handleDelete = async (id) => {
-    dispatch(startProcess())
+  const handleDelete = async (params) => {
+    const id = params.id
+    console.log(id)
+    dispatch(startProcess)
     try {
-      await privateRequest.delete(`/products/${id}`)
-      dispatch(deleteProductsSuccess(id))
+      await privateRequest.delete(`/users/${id}`)
+      dispatch(deleteUserSuccess(id))
     } catch (error) {
       dispatch(failedProcess(error))
     }
@@ -114,7 +116,7 @@ const Users = () => {
               <EditButton><EditIcon /></EditButton>
             </Link>
             <Link>
-              <DeleteButton onClick={() => handleDelete(params.row.id)}><DeleteIcon /></DeleteButton>
+              <DeleteButton onClick={() => handleDelete(params)}><DeleteIcon /></DeleteButton>
             </Link>
           </Actions>
         )

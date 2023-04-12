@@ -22,6 +22,13 @@ const usersDataSlice = createSlice({
       state.isFetching = false;
       state.usersData = action.payload;
     },
+    deleteUserSuccess: (state, action) => {
+      state.isFetching = false;
+      state.usersData.splice(
+        state.usersData.findIndex((user) => user._id === action.payload),
+        1
+      );
+    },
     updateUserData: (state, action) => {
       state.isFetching = false;
       const userIndex = state.usersData.findIndex(
@@ -35,7 +42,12 @@ const usersDataSlice = createSlice({
   },
 });
 
-export const { startProcess, failedProcess, getAllUsersData, updateUserData } =
-  usersDataSlice.actions;
+export const {
+  startProcess,
+  failedProcess,
+  getAllUsersData,
+  updateUserData,
+  deleteUserSuccess,
+} = usersDataSlice.actions;
 
 export default usersDataSlice.reducer;
