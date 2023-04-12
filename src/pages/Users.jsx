@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { getAllUsers } from "../apiCalls"
 import { useDispatch, useSelector } from "react-redux"
 import usePrivateRequest from "../hooks/usePrivateRequestInterceptors"
+import { deleteProductsSuccess, failedProcess, startProcess } from '../redux/productSlice';
 import "./users.css"
 
 const Container = styled.div`
@@ -26,9 +27,6 @@ const Image = styled.img`
   border-radius: 50%;
   object-fit: cover;
   margin-right: 15px;
-`
-const Actions = styled.div`
-  
 `
 const EditButton = styled.button`
   border: none;
@@ -62,8 +60,14 @@ const Users = () => {
   }, [])
 
 
-  const handleDelete = (id) => {
-    setData(data.filter(item => item.id !== id))
+  const handleDelete = async (id) => {
+    dispatch(startProcess())
+    try {
+      await privateRequest.delete(`/products/${id}`)
+      dispatch(deleteProductsSuccess(id))
+    } catch (error) {
+      dispatch(failedProcess(error))
+    }
   }
 
   const columns = [
